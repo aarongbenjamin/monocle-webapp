@@ -27,4 +27,12 @@ routes.post('/claims', async (req, res) => {
     res.json(claim.toJSON());
 });
 
+routes.get('/claims', async (req, res) => {
+    const claims = await Claim.find();
+
+    res.json(claims.map((claim) => {
+        return claim.toJSON();
+    }))
+});
+
 export default routes;
