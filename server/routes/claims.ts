@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { Schema, model } from 'mongoose';
 
-const routes = Router();
+const router = Router();
 interface IClaim {
     title: string,
     incidentDate: Date,
@@ -15,24 +15,25 @@ const claimSchema = new Schema<IClaim>({
 
 const Claim = model('Claim', claimSchema);
 
-routes.post('/claims', async (req, res) => {
-    const { title, incidentDate } = req.body;
+router
+    .route('/claims')
+    .post(async (req, res) => {
+        const { title, incidentDate } = req.body;
 
-    const claim = new Claim({
-        title, incidentDate, createdDate: Date.now()
+        const claim = new Claim({
+            title, incidentDate, createdDate: Date.now()
+        });
+
+        await claim.save();
+
+        res.json(claim.toJSON());
+    })
+    .get(async (req, res) => {
+        const claims = await Claim.find();
+
+        res.json(claims.map((claim) => {
+            return claim.toJSON();
+        }));
     });
 
-    await claim.save();
-
-    res.json(claim.toJSON());
-});
-
-routes.get('/claims', async (req, res) => {
-    const claims = await Claim.find();
-
-    res.json(claims.map((claim) => {
-        return claim.toJSON();
-    }))
-});
-
-export default routes;
+export default router;
