@@ -1,17 +1,16 @@
-import React, { FunctionComponent } from 'react'
-import { Link, Outlet } from 'react-router-dom'
-import { AppBar, Container } from '@mui/material'
+import React, { FunctionComponent } from 'react';
+import { Outlet } from 'react-router-dom';
+import { Box } from '@mui/material';
+import Navbar from '../Navbar.tsx/Navbar';
 
 const Layout: FunctionComponent = () => {
-    return (
-        <Container>
-            <AppBar>
-                <Link to="/">Claims</Link>
-            </AppBar>
-            
-            <Outlet />
-        </Container>
-    )
-}
+  return (
+    <Box sx={{ flexGrow: 1 }}>
+      <Navbar />
+
+      <Outlet />
+    </Box>
+  );
+};
 
 export default Layout;
