@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { FunctionComponent } from 'react';
-import StartClaimModal from '../StartClaimModal/StartClaim';
+import StartClaimModal from '../StartClaimModal/StartClaimModal';
 
 const Navbar: FunctionComponent = () => {
   const [openStartClaimModal, setOpenStartClaimModal] = useState(false);
