@@ -1,5 +1,6 @@
 import { Box, Modal, Typography } from '@mui/material';
 import React, { FunctionComponent } from 'react';
+import ModalContent from './ModalContent';
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
@@ -28,14 +29,7 @@ const StartClaimModal: FunctionComponent<StartClaimModalProps> = ({
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          This is where the initial inputs will be to start a claim/s
-        </Typography>
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-        </Typography>
-      </Box>
+      <ModalContent />
     </Modal>
   );
 };
