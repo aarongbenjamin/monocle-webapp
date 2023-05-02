@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Box } from '@mui/material';
-import Navbar from '../Navbar.tsx/Navbar';
+import Navbar from '../Navbar/Navbar';
 
 const Layout: FunctionComponent = () => {
   return (
