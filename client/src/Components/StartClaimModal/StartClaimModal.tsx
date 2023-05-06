@@ -1,5 +1,5 @@
 import { Box, Modal, Typography } from '@mui/material';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import ModalContent from './ModalContent';
 const style = {
   position: 'absolute' as 'absolute',
@@ -14,22 +14,38 @@ const style = {
 };
 interface StartClaimModalProps {
   open: boolean;
-  onClose:
+  onClose?:
     | ((event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void)
     | undefined;
+  closeModal: () => void;
 }
 const StartClaimModal: FunctionComponent<StartClaimModalProps> = ({
   open,
-  onClose
+  // onClose,
+  closeModal
 }) => {
+  const startNewClaim = async () => {
+    const waitFor = (delay: number) =>
+      new Promise((resolve) => setTimeout(resolve, delay));
+
+    await waitFor(1000);
+    return 'Yay';
+  };
+  const [saving, setSaving] = useState(false);
+  const handleSave = async (newClaim: any) => {
+    setSaving(true);
+    await startNewClaim();
+    setSaving(false);
+    closeModal();
+  };
   return (
     <Modal
       open={open}
-      onClose={onClose}
+      // onClose={onClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <ModalContent />
+      <ModalContent saving={saving} save={handleSave} />
     </Modal>
   );
 };

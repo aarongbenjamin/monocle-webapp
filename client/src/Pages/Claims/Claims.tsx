@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import axios from 'axios';
 import {
+  CircularProgress,
   Paper,
   Table,
   TableBody,
@@ -10,6 +11,7 @@ import {
   TableRow
 } from '@mui/material';
 import { standardDateFormat } from '../../util/format-date';
+import { useQuery } from 'react-query';
 interface IClaim {
   _id: string;
   title: string;
@@ -17,15 +19,13 @@ interface IClaim {
   incidentDate: string;
 }
 const Claims: FunctionComponent = () => {
-  const [claims, setClaims] = useState<IClaim[]>([]);
-
-  useEffect(() => {
-    axios.get('/api/claims').then((response) => {
-      const resposnseClaims = response.data as IClaim[];
-      setClaims(resposnseClaims);
-    });
-  }, []);
-  return (
+  const { isLoading, data } = useQuery('ClaimsList', async () => {
+    const response = await axios.get('/api/claims');
+    return response.data as IClaim[];
+  });
+  return isLoading ? (
+    <CircularProgress />
+  ) : (
     <TableContainer component={Paper}>
       <Table>
         <TableHead>
@@ -36,7 +36,7 @@ const Claims: FunctionComponent = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {claims.map((claim) => (
+          {data!.map((claim) => (
             <TableRow
               key={claim._id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}

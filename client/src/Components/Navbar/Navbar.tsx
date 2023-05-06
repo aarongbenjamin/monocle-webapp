@@ -40,7 +40,7 @@ const Navbar: FunctionComponent = () => {
           </Button>
           <StartClaimModal
             open={openStartClaimModal}
-            onClose={handleStartClaimClickClose}
+            closeModal={handleStartClaimClickClose}
           />
         </Toolbar>
       </AppBar>

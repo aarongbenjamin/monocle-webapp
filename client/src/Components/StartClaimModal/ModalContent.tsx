@@ -13,6 +13,9 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { DatePicker } from '@mui/x-date-pickers';
+import { useQuery } from 'react-query';
+import { LoadingButton } from '@mui/lab';
+import { useState } from 'react';
 
 function Copyright(props: any) {
   return (
@@ -34,19 +37,24 @@ function Copyright(props: any) {
 
 const theme = createTheme();
 
-export default function ModalContent() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+export default function ModalContent({
+  save,
+  saving
+}: {
+  saving: boolean;
+  save: (newClaim: any) => void;
+}) {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('title'),
-      password: data.get('incidentDate')
-    });
+    save({});
   };
-
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <Container
+        component="main"
+        maxWidth="xs"
+        sx={{ backgroundColor: 'white', borderRadius: '5px' }}
+      >
         <CssBaseline />
         <Box
           sx={{
@@ -63,7 +71,7 @@ export default function ModalContent() {
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
                   name="title"
                   required
@@ -73,31 +81,31 @@ export default function ModalContent() {
                   autoFocus
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={6}>
                 <DatePicker
                   disableFuture
-                  label="Incident Date"
+                  label="Date of Loss"
                   slotProps={{
                     textField: {
-                      id: 'indidentDate',
-                      name: 'incidentDate',
+                      id: 'dateOfLoss',
+                      name: 'dateOfLoss',
                       required: true
                     }
                   }}
                 />
               </Grid>
             </Grid>
-            <Button
+            <LoadingButton
+              loading={saving}
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign Up
-            </Button>
+              Save
+            </LoadingButton>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 5 }} />
       </Container>
     </ThemeProvider>
   );
