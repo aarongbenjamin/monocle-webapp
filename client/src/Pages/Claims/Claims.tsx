@@ -1,4 +1,10 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, {
+  FunctionComponent,
+  useCallback,
+  useContext,
+  useEffect,
+  useState
+} from 'react';
 import axios from 'axios';
 import {
   CircularProgress,
@@ -12,17 +18,24 @@ import {
 } from '@mui/material';
 import { standardDateFormat } from '../../util/format-date';
 import { useQuery } from 'react-query';
-interface IClaim {
-  _id: string;
-  title: string;
-  createdDate: string;
-  incidentDate: string;
-}
-const Claims: FunctionComponent = () => {
-  const { isLoading, data } = useQuery('ClaimsList', async () => {
-    const response = await axios.get('/api/claims');
-    return response.data as IClaim[];
-  });
+import { IClaim } from '../../Models/claim';
+import { ClaimsContext } from '../../Providers/ClaimsProvider';
+
+const Claims = () => {
+  const { claims, setClaims } = useContext(ClaimsContext);
+
+  const { isLoading } = useQuery(
+    'ClaimsList',
+    async () => {
+      console.log('Fetching claims');
+      const response = await axios.get<IClaim[]>('/api/claims');
+      return response.data!;
+    },
+    {
+      onSuccess: setClaims
+    }
+  );
+
   return isLoading ? (
     <CircularProgress />
   ) : (
@@ -32,18 +45,18 @@ const Claims: FunctionComponent = () => {
           <TableRow>
             <TableCell>Title</TableCell>
             <TableCell>Created Date</TableCell>
-            <TableCell>Incident Date</TableCell>
+            <TableCell>Date of Loss</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {data!.map((claim) => (
+          {claims.map((claim) => (
             <TableRow
               key={claim._id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell>{claim.title}</TableCell>
               <TableCell>{standardDateFormat(claim.createdDate)}</TableCell>
-              <TableCell>{standardDateFormat(claim.incidentDate)}</TableCell>
+              <TableCell>{standardDateFormat(claim.dateOfLoss)}</TableCell>
             </TableRow>
           ))}
         </TableBody>

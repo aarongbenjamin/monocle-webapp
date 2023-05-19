@@ -1,17 +1,14 @@
-import { Box, Modal, Typography } from '@mui/material';
-import React, { FunctionComponent, useState } from 'react';
+import { Modal } from '@mui/material';
+import React, { FunctionComponent, useContext, useState } from 'react';
 import ModalContent from './ModalContent';
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4
-};
+import {
+  IClaim,
+  IClaimCreatedResponse,
+  INewClaimRequest
+} from '../../Models/claim';
+import axios from 'axios';
+import { ClaimsContext } from '../../Providers/ClaimsProvider';
+
 interface StartClaimModalProps {
   open: boolean;
   onClose?:
@@ -19,22 +16,32 @@ interface StartClaimModalProps {
     | undefined;
   closeModal: () => void;
 }
-const StartClaimModal: FunctionComponent<StartClaimModalProps> = ({
+const StartClaimModal = ({
   open,
   // onClose,
   closeModal
-}) => {
-  const startNewClaim = async () => {
-    const waitFor = (delay: number) =>
-      new Promise((resolve) => setTimeout(resolve, delay));
+}: StartClaimModalProps) => {
+  const { setClaims } = useContext(ClaimsContext);
+  const startNewClaim = async (newClaim: INewClaimRequest) => {
+    const response = await axios.post<IClaimCreatedResponse>(
+      '/api/claims',
+      newClaim
+    );
 
-    await waitFor(1000);
-    return 'Yay';
+    //TODO: needs to handle error responses
+    const createdClaim = response.data;
+    const claimListItem: IClaim = {
+      ...createdClaim
+    };
+    setClaims((claims) => {
+      return [claimListItem, ...claims];
+    });
+    return createdClaim;
   };
   const [saving, setSaving] = useState(false);
-  const handleSave = async (newClaim: any) => {
+  const handleSave = async (newClaim: INewClaimRequest) => {
     setSaving(true);
-    await startNewClaim();
+    await startNewClaim(newClaim);
     setSaving(false);
     closeModal();
   };

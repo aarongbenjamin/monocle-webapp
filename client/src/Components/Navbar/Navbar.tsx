@@ -8,10 +8,9 @@ import {
   Typography
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { FunctionComponent } from 'react';
 import StartClaimModal from '../StartClaimModal/StartClaimModal';
 
-const Navbar: FunctionComponent = () => {
+const Navbar = () => {
   const [openStartClaimModal, setOpenStartClaimModal] = useState(false);
   const handleStartClaimClick = () => {
     setOpenStartClaimModal(true);
