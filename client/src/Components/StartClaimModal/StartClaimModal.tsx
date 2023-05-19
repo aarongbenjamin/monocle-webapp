@@ -1,11 +1,7 @@
 import { Modal } from '@mui/material';
-import React, { FunctionComponent, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import ModalContent from './ModalContent';
-import {
-  IClaim,
-  IClaimCreatedResponse,
-  INewClaimRequest
-} from '../../Models/claim';
+import { IClaim, INewClaimRequest } from '../../Models/claim';
 import axios from 'axios';
 import { ClaimsContext } from '../../Providers/ClaimsProvider';
 
@@ -23,18 +19,12 @@ const StartClaimModal = ({
 }: StartClaimModalProps) => {
   const { setClaims } = useContext(ClaimsContext);
   const startNewClaim = async (newClaim: INewClaimRequest) => {
-    const response = await axios.post<IClaimCreatedResponse>(
-      '/api/claims',
-      newClaim
-    );
+    const response = await axios.post<IClaim>('/api/claims', newClaim);
 
     //TODO: needs to handle error responses
     const createdClaim = response.data;
-    const claimListItem: IClaim = {
-      ...createdClaim
-    };
     setClaims((claims) => {
-      return [claimListItem, ...claims];
+      return [createdClaim, ...claims];
     });
     return createdClaim;
   };
