@@ -5,19 +5,21 @@ import { IClaim, INewClaimRequest } from '../../Models/claim';
 import axios from 'axios';
 import { ClaimsContext } from '../../Providers/ClaimsProvider';
 
-interface StartClaimModalProps {
+type StartClaimModalProps = {
   open: boolean;
   onClose?:
     | ((event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void)
     | undefined;
   closeModal: () => void;
-}
+};
 const StartClaimModal = ({
   open,
   // onClose,
   closeModal
 }: StartClaimModalProps) => {
   const { setClaims } = useContext(ClaimsContext);
+  const [saving, setSaving] = useState(false);
+
   const startNewClaim = async (newClaim: INewClaimRequest) => {
     const response = await axios.post<IClaim>('/api/claims', newClaim);
 
@@ -28,7 +30,6 @@ const StartClaimModal = ({
     });
     return createdClaim;
   };
-  const [saving, setSaving] = useState(false);
   const handleSave = async (newClaim: INewClaimRequest) => {
     setSaving(true);
     await startNewClaim(newClaim);

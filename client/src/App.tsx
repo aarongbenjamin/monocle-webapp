@@ -7,6 +7,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import ContextProviders from './Providers';
+import ClaimForm from './Components/ClaimForm/ClaimForm';
 const client = new QueryClient();
 function App() {
   return (
@@ -16,7 +17,8 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Layout />}>
-                <Route index element={<Claims />} />
+                <Route path="/claims" element={<Claims />} />
+                <Route path="/claims/:claimNumber" element={<ClaimForm />} />
                 <Route path="*" element={<h1>Page Not Found</h1>} />
               </Route>
             </Routes>
