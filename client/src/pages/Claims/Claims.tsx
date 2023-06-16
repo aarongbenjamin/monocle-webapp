@@ -44,15 +44,10 @@ const Claims = () => {
   const { setNavbarTitle: setTitle } = useContext(NavBarTitleContext);
 
   const navigate = useNavigate();
-  const { isLoading } = useQuery(
-    'ClaimsList',
-    fetchClaims,
-    {
-      onSuccess: setClaims
-    }
-  );
-
-  setTitle('Claims');
+  const { isLoading } = useQuery('ClaimsList', fetchClaims, {
+    onSuccess: setClaims
+  });
+  useEffect(() => setTitle('Claims'));
 
   return isLoading ? (
     <CircularProgress />

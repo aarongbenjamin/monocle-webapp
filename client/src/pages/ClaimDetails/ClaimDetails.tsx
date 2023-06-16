@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Button,
   TextField,
@@ -32,7 +32,7 @@ import dayjs, { Dayjs } from 'dayjs';
 const useClaimDetails = () => {
   // State for managing form data
   const [title, setTitle] = useState('');
-  const [dateOfLoss, setDateOfLoss] = useState<Dayjs | null>();
+  const [dateOfLoss, setDateOfLoss] = useState<Dayjs | null>(null);
   const [facilities, setFacilities] = useState([
     {
       type: '',
@@ -97,7 +97,7 @@ const ClaimDetails: React.FC = () => {
   }
 
   const { setNavbarTitle } = useContext(NavBarTitleContext);
-  setNavbarTitle(`Claim - ${id}`);
+  useEffect(() => setNavbarTitle(`Claim - ${id}`));
 
   const { isLoading, data } = useQuery(
     id,
@@ -283,13 +283,12 @@ const ClaimDetails: React.FC = () => {
           </IconButton>
         </Box>
       </Grid>
-      <Grid item spacing={3} xs={12}>
+      <Grid item xs={12}>
         <Box component="fieldset" marginBottom={2}>
           <FormLabel component="legend">Adverse Party</FormLabel>
           <Grid container spacing={3}>
             <Grid item xs={3}>
               <TextField
-                fullWidth
                 label="Name"
                 value={adverseParty.name}
                 onChange={(event) =>
@@ -299,7 +298,6 @@ const ClaimDetails: React.FC = () => {
             </Grid>
             <Grid item xs={3}>
               <PhoneNumberInput
-                fullWidth
                 value={adverseParty.phoneNumber}
                 onChange={(value) => {
                   handleAdversePartyFieldChange('phoneNumber', value);

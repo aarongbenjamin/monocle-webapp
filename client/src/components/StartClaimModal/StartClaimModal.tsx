@@ -4,19 +4,18 @@ import ModalContent from './ModalContent';
 import { IClaim, INewClaimRequest } from '../../models/claim';
 import axios from 'axios';
 import { ClaimsContext } from '../../providers/ClaimsProvider';
-
+export enum CloseAction {
+  Save,
+  Cancel
+}
 type StartClaimModalProps = {
   open: boolean;
   onClose?:
     | ((event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void)
     | undefined;
-  closeModal: () => void;
+  closeModal: (action: CloseAction, newClaimId: string | undefined) => void;
 };
-const StartClaimModal = ({
-  open,
-  // onClose,
-  closeModal
-}: StartClaimModalProps) => {
+const StartClaimModal = ({ open, closeModal }: StartClaimModalProps) => {
   const { setClaims } = useContext(ClaimsContext);
   const [saving, setSaving] = useState(false);
 
@@ -30,11 +29,11 @@ const StartClaimModal = ({
     });
     return createdClaim;
   };
-  const handleSave = async (newClaim: INewClaimRequest) => {
+  const handleSave = async (newClaimRequest: INewClaimRequest) => {
     setSaving(true);
-    await startNewClaim(newClaim);
+    const newClaim = await startNewClaim(newClaimRequest);
     setSaving(false);
-    closeModal();
+    closeModal(CloseAction.Save, newClaim._id);
   };
   return (
     <Modal

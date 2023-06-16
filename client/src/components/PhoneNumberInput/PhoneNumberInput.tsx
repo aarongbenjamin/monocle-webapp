@@ -16,7 +16,7 @@ const CustomInput = forwardRef<HTMLInputElement, DefaultInputComponentProps>(
 );
 const PhoneNumberInput: React.FC<PhoneNumberInputProps> = (props) => {
   return (
-    <FormControl fullWidth>
+    <FormControl fullWidth={props.fullWidth}>
       <PhoneInput
         {...props}
         placeholder="(999) 999-9999"

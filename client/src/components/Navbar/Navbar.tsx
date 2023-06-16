@@ -8,18 +8,28 @@ import {
   Typography
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import StartClaimModal from '../StartClaimModal/StartClaimModal';
+import StartClaimModal, {
+  CloseAction
+} from '../StartClaimModal/StartClaimModal';
 import { NavBarTitleContext } from '../../providers/NavbarTitleProvider';
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const [openStartClaimModal, setOpenStartClaimModal] = useState(false);
   const { title } = useContext(NavBarTitleContext);
 
   const handleStartClaimClick = () => {
     setOpenStartClaimModal(true);
   };
-  const handleStartClaimClickClose = () => {
+  const handleStartClaimClickClose = (
+    action: CloseAction,
+    newClaimId: string | undefined
+  ) => {
     setOpenStartClaimModal(false);
+    if (action === CloseAction.Save) {
+      navigate(`/claims/${newClaimId}`);
+    }
   };
   return (
     <Box sx={{ flexGrow: 1 }}>
