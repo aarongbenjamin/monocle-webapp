@@ -19,8 +19,14 @@ import {
 } from '@mui/material';
 import { standardDateFormat } from '../../util/format-date';
 import { useQuery } from 'react-query';
-import { IClaim } from '../../Models/claim';
-import { ClaimsContext } from '../../Providers/ClaimsProvider';
+import { IClaim } from '../../models/claim';
+import {
+  ClaimsContext,
+  SelectedClaimContext
+} from '../../providers/ClaimsProvider';
+import { useNavigate } from 'react-router-dom';
+import { NavBarTitleContext } from '../../providers/NavbarTitleProvider';
+import { fetchClaims } from '../../api/claims/ClaimsAPI';
 
 const StyledTableRow = styled(TableRow)`
   &:hover {
@@ -35,18 +41,18 @@ const StyledTableRow = styled(TableRow)`
 
 const Claims = () => {
   const { claims, setClaims } = useContext(ClaimsContext);
+  const { setNavbarTitle: setTitle } = useContext(NavBarTitleContext);
 
+  const navigate = useNavigate();
   const { isLoading } = useQuery(
     'ClaimsList',
-    async () => {
-      console.log('Fetching claims');
-      const response = await axios.get<IClaim[]>('/api/claims');
-      return response.data!;
-    },
+    fetchClaims,
     {
       onSuccess: setClaims
     }
   );
+
+  setTitle('Claims');
 
   return isLoading ? (
     <CircularProgress />
@@ -65,6 +71,10 @@ const Claims = () => {
             <StyledTableRow
               key={claim._id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              onClick={(event) => {
+                navigate(`/claims/${claim._id}`);
+                setTitle(`Claim - ${claim._id}`);
+              }}
             >
               <TableCell className="title">{claim.title}</TableCell>
               <TableCell>{standardDateFormat(claim.createdDate)}</TableCell>

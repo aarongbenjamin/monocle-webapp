@@ -1,9 +1,9 @@
 import { Modal } from '@mui/material';
 import React, { useContext, useState } from 'react';
 import ModalContent from './ModalContent';
-import { IClaim, INewClaimRequest } from '../../Models/claim';
+import { IClaim, INewClaimRequest } from '../../models/claim';
 import axios from 'axios';
-import { ClaimsContext } from '../../Providers/ClaimsProvider';
+import { ClaimsContext } from '../../providers/ClaimsProvider';
 
 type StartClaimModalProps = {
   open: boolean;

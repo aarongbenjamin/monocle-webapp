@@ -12,10 +12,9 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { DatePicker } from '@mui/x-date-pickers';
 import { LoadingButton } from '@mui/lab';
-import { INewClaimRequest } from '../../Models/claim';
+import { INewClaimRequest } from '../../models/claim';
 import dayjs from 'dayjs';
 
-const theme = createTheme();
 function getDate(formData: FormData, fieldName: string): Date | null {
   const dateString = formData.get(fieldName);
 
@@ -46,7 +45,6 @@ const ModalContent = React.forwardRef(
       });
     };
     return (
-      <ThemeProvider theme={theme}>
         <Container
           component="main"
           maxWidth="xs"
@@ -100,7 +98,6 @@ const ModalContent = React.forwardRef(
             </Box>
           </Box>
         </Container>
-      </ThemeProvider>
     );
   }
 );

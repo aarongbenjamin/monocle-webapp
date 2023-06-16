@@ -1,5 +1,5 @@
 import React, { createContext } from 'react';
-import { IClaim } from '../Models/claim';
+import { IClaim } from '../models/claim';
 import { useState } from 'react';
 
 export const ClaimsContext = createContext<{

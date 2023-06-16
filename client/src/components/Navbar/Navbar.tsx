@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   AppBar,
   Box,
@@ -9,9 +9,12 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import StartClaimModal from '../StartClaimModal/StartClaimModal';
+import { NavBarTitleContext } from '../../providers/NavbarTitleProvider';
 
 const Navbar = () => {
   const [openStartClaimModal, setOpenStartClaimModal] = useState(false);
+  const { title } = useContext(NavBarTitleContext);
+
   const handleStartClaimClick = () => {
     setOpenStartClaimModal(true);
   };
@@ -32,7 +35,7 @@ const Navbar = () => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Claims
+            {title}
           </Typography>
           <Button color="inherit" onClick={handleStartClaimClick}>
             Start Claim
