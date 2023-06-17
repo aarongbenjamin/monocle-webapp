@@ -1,4 +1,4 @@
-import { Claim, IClaim } from '../models/Claim';
+import { Claim, ClaimStatus, IClaim } from '../models/Claim';
 import {
   model,
   Error as MongooseError,
@@ -15,7 +15,8 @@ export default {
     const claim = new Claim({
       title,
       dateOfLoss,
-      createdDate: Date.now()
+      createdDate: Date.now(),
+      status: ClaimStatus.UnderInvestigation
     });
     const validationError = claim.validateSync();
     if (validationError) {
@@ -53,8 +54,19 @@ export default {
     }
   },
   getClaims: async (): Promise<IClaim[]> => {
-    const claims = await Claim.find();
+    const claims = await Claim.find().sort({ dateOfLoss: 'desc' }).exec();
 
     return claims;
+  },
+  updateClaimById: async (
+    id: string,
+    update: Partial<IClaim>
+  ): Promise<IClaim | null> => {
+    try {
+      const claim = await Claim.findByIdAndUpdate(id, update, { new: true });
+      return claim ? claim.toObject<IClaim>() : null;
+    } catch (error) {
+      throw error;
+    }
   }
 };

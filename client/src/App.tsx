@@ -14,6 +14,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import ContextProviders from './Providers';
 import ClaimDetails from './pages/ClaimDetails/ClaimDetails';
+import GlobalErrorHandler from './components/GlobalErrorHandler/GlobalErrorHandler';
 const client = new QueryClient();
 function App() {
   return (

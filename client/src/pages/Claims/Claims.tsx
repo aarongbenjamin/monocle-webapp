@@ -15,7 +15,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  styled
+  styled,
+  LinearProgress
 } from '@mui/material';
 import { standardDateFormat } from '../../util/format-date';
 import { useQuery } from 'react-query';
@@ -50,14 +51,13 @@ const Claims = () => {
   useEffect(() => setTitle('Claims'));
 
   return isLoading ? (
-    <CircularProgress />
+    <LinearProgress />
   ) : (
     <TableContainer component={Paper}>
       <Table>
         <TableHead>
           <TableRow>
             <TableCell>Title</TableCell>
-            <TableCell>Created Date</TableCell>
             <TableCell>Date of Loss</TableCell>
           </TableRow>
         </TableHead>
@@ -72,7 +72,6 @@ const Claims = () => {
               }}
             >
               <TableCell className="title">{claim.title}</TableCell>
-              <TableCell>{standardDateFormat(claim.createdDate)}</TableCell>
               <TableCell>{standardDateFormat(claim.dateOfLoss)}</TableCell>
               <TableCell></TableCell>
             </StyledTableRow>

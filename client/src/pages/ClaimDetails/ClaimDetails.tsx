@@ -16,7 +16,8 @@ import {
   RadioGroup,
   Radio,
   Grid,
-  Box
+  Box,
+  LinearProgress
 } from '@mui/material';
 import { Add, Remove } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -25,42 +26,46 @@ import PhoneNumberInput from '../../components/PhoneNumberInput/PhoneNumberInput
 import EmailInput from '../../components/EmailInput/EmailInput';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { fetchClaimById } from '../../api/claims/ClaimsAPI';
+import { fetchClaimById, updateClaim } from '../../api/claims/ClaimsAPI';
 import { useDateTimeField } from '@mui/x-date-pickers/DateTimeField/useDateTimeField';
 import dayjs, { Dayjs } from 'dayjs';
+import { AdverseParty, ClaimStatus, Facility } from '../../models/claim';
+import { IsLoadingContext } from '../../providers/IsLoadingProvider';
+import ErrorDisplay from '../../components/ErrorDisplay/ErrorDisplay';
+import {
+  isValidateErrorResponse,
+  ValidationErrorResponse
+} from '../../models/validationError';
+import { LoadingButton } from '@mui/lab';
 
 const useClaimDetails = () => {
   // State for managing form data
   const [title, setTitle] = useState('');
   const [dateOfLoss, setDateOfLoss] = useState<Dayjs | null>(null);
-  const [facilities, setFacilities] = useState([
-    {
-      type: '',
-      repairCost: '',
-      description: ''
-    }
+  const [facilities, setFacilities] = useState<Facility[]>([
+    { type: '', description: '', repairCost: '' }
   ]);
-  const [adverseParty, setAdverseParty] = useState({
-    name: '',
-    phoneNumber: '',
-    email: '',
+  const [adverseParty, setAdverseParty] = useState<AdverseParty>({
     address: {
       addressLine1: '',
       addressLine2: '',
-      unit: '',
       city: '',
       state: '',
+      unit: '',
       zip: ''
     },
+    email: '',
     insurance: {
-      companyName: '',
       adjustorName: '',
-      phoneNumber: '',
-      email: ''
-    }
+      companyName: '',
+      email: '',
+      phoneNumber: ''
+    },
+    name: '',
+    phoneNumber: ''
   });
 
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState<ClaimStatus | string>('');
 
   return {
     title,
@@ -78,6 +83,12 @@ const useClaimDetails = () => {
 
 // Main claim form component
 const ClaimDetails: React.FC = () => {
+  const { setIsLoading } = useContext(IsLoadingContext);
+  const [saveErrors, setSaveErrors] = useState<
+    ValidationErrorResponse | undefined
+  >();
+  const [saving, setSaving] = useState(false);
+  useEffect(() => {});
   const { id } = useParams<{ id: string }>();
   const {
     title,
@@ -99,13 +110,21 @@ const ClaimDetails: React.FC = () => {
   const { setNavbarTitle } = useContext(NavBarTitleContext);
   useEffect(() => setNavbarTitle(`Claim - ${id}`));
 
-  const { isLoading, data } = useQuery(
+  useQuery(
     id,
-    async () => await fetchClaimById(id),
+    async () => {
+      setIsLoading(true);
+      const data = await fetchClaimById(id);
+      setIsLoading(false);
+      return data;
+    },
     {
       onSuccess: (data) => {
         setTitle(data.title);
         setDateOfLoss(dayjs(data.dateOfLoss));
+        setStatus(data.status);
+        setAdverseParty(data.adverseParty ?? {});
+        setFacilities(data.facilities ?? [{}]);
       },
       refetchOnWindowFocus: false
     }
@@ -137,14 +156,14 @@ const ClaimDetails: React.FC = () => {
     setFacilities(updatedFacilities);
   };
 
-  const handleAdversePartyFieldChange = (field: string, value: string) => {
+  const handleAdversePartyFieldChange = (field: string, value?: string) => {
     setAdverseParty((prevState) => ({
       ...prevState,
       [field]: value
     }));
   };
 
-  const handleAdversePartyAddressChange = (field: string, value: string) => {
+  const handleAdversePartyAddressChange = (field: string, value?: string) => {
     setAdverseParty((prevState) => ({
       ...prevState,
       address: {
@@ -154,7 +173,7 @@ const ClaimDetails: React.FC = () => {
     }));
   };
 
-  const handleAdversePartyInsuranceChange = (field: string, value: string) => {
+  const handleAdversePartyInsuranceChange = (field: string, value?: string) => {
     setAdverseParty((prevState) => ({
       ...prevState,
       insurance: {
@@ -164,20 +183,39 @@ const ClaimDetails: React.FC = () => {
     }));
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     // Validate form fields and save claim information
     // Make API call to save data
-    console.log('Form data:', {
+
+    setSaving(true);
+    const result = await updateClaim(id, {
       title,
-      dateOfLoss,
+      dateOfLoss: dateOfLoss?.toDate(),
       facilities,
       adverseParty,
-      status
+      status: status as ClaimStatus
     });
+    setSaving(false);
+    if (isValidateErrorResponse(result)) {
+      setSaveErrors(result);
+    }
   };
+
+  const justify = saveErrors ? 'space-between' : 'flex-end';
 
   return (
     <Grid container spacing={3}>
+      <Grid item container justifyContent={justify} xs={12}>
+        {saveErrors && <ErrorDisplay error={saveErrors!} />}
+        <LoadingButton
+          loading={saving}
+          variant="contained"
+          color="primary"
+          onClick={handleSave}
+        >
+          Save
+        </LoadingButton>
+      </Grid>
       <Grid item xs={6}>
         <TextField
           label="Title"
@@ -207,14 +245,18 @@ const ClaimDetails: React.FC = () => {
           <InputLabel>Status</InputLabel>
           <Select
             value={status}
-            onChange={(event) => setStatus(event.target.value as string)}
+            onChange={(event) => setStatus(event.target.value)}
           >
-            <MenuItem value="underInvestigation">Under Investigation</MenuItem>
-            <MenuItem value="readyForCollection">Ready for Collection</MenuItem>
-            <MenuItem value="attemptingCollection">
+            <MenuItem value={ClaimStatus.UnderInvestigation}>
+              Under Investigation
+            </MenuItem>
+            <MenuItem value={ClaimStatus.ReadyForCollection}>
+              Ready for Collection
+            </MenuItem>
+            <MenuItem value={ClaimStatus.AttemptingCollection}>
               Attempting Collection
             </MenuItem>
-            <MenuItem value="paidInFull">Paid in Full</MenuItem>
+            <MenuItem value={ClaimStatus.PaidInFull}>Paid in Full</MenuItem>
           </Select>
         </FormControl>
       </Grid>
@@ -290,7 +332,7 @@ const ClaimDetails: React.FC = () => {
             <Grid item xs={3}>
               <TextField
                 label="Name"
-                value={adverseParty.name}
+                value={adverseParty?.name}
                 onChange={(event) =>
                   handleAdversePartyFieldChange('name', event.target.value)
                 }
@@ -307,7 +349,7 @@ const ClaimDetails: React.FC = () => {
             </Grid>
             <Grid item xs={3}>
               <EmailInput
-                value={adverseParty.email}
+                value={adverseParty?.email}
                 onChange={(value) =>
                   handleAdversePartyFieldChange('email', value)
                 }
@@ -316,7 +358,7 @@ const ClaimDetails: React.FC = () => {
             <Grid item xs={3}>
               <TextField
                 label="Address Line 1"
-                value={adverseParty.address.addressLine1}
+                value={adverseParty?.address?.addressLine1}
                 onChange={(event) =>
                   handleAdversePartyAddressChange(
                     'addressLine1',
@@ -328,7 +370,7 @@ const ClaimDetails: React.FC = () => {
             <Grid item xs={3}>
               <TextField
                 label="Address Line 2"
-                value={adverseParty.address.addressLine2}
+                value={adverseParty?.address?.addressLine2}
                 onChange={(event) =>
                   handleAdversePartyAddressChange(
                     'addressLine2',
@@ -340,7 +382,7 @@ const ClaimDetails: React.FC = () => {
             <Grid item xs={3}>
               <TextField
                 label="Unit"
-                value={adverseParty.address.unit}
+                value={adverseParty?.address?.unit}
                 onChange={(event) =>
                   handleAdversePartyAddressChange('unit', event.target.value)
                 }
@@ -349,7 +391,7 @@ const ClaimDetails: React.FC = () => {
             <Grid item xs={3}>
               <TextField
                 label="City"
-                value={adverseParty.address.city}
+                value={adverseParty?.address?.city}
                 onChange={(event) =>
                   handleAdversePartyAddressChange('city', event.target.value)
                 }
@@ -358,7 +400,7 @@ const ClaimDetails: React.FC = () => {
             <Grid item xs={3}>
               <TextField
                 label="State"
-                value={adverseParty.address.state}
+                value={adverseParty?.address?.state}
                 onChange={(event) =>
                   handleAdversePartyAddressChange('state', event.target.value)
                 }
@@ -367,7 +409,7 @@ const ClaimDetails: React.FC = () => {
             <Grid item xs={3}>
               <TextField
                 label="Zip"
-                value={adverseParty.address.zip}
+                value={adverseParty?.address?.zip}
                 onChange={(event) =>
                   handleAdversePartyAddressChange('zip', event.target.value)
                 }
@@ -376,7 +418,7 @@ const ClaimDetails: React.FC = () => {
             <Grid item xs={3}>
               <TextField
                 label="Company Name"
-                value={adverseParty.insurance.companyName}
+                value={adverseParty?.insurance?.companyName}
                 onChange={(event) =>
                   handleAdversePartyInsuranceChange(
                     'companyName',
@@ -388,7 +430,7 @@ const ClaimDetails: React.FC = () => {
             <Grid item xs={3}>
               <TextField
                 label="Adjustor Name"
-                value={adverseParty.insurance.adjustorName}
+                value={adverseParty?.insurance?.adjustorName}
                 onChange={(event) =>
                   handleAdversePartyInsuranceChange(
                     'adjustorName',
@@ -399,7 +441,7 @@ const ClaimDetails: React.FC = () => {
             </Grid>
             <Grid item xs={3}>
               <PhoneNumberInput
-                value={adverseParty.insurance.phoneNumber}
+                value={adverseParty?.insurance?.phoneNumber}
                 onChange={(value) =>
                   handleAdversePartyInsuranceChange('phoneNumber', value)
                 }
@@ -407,7 +449,7 @@ const ClaimDetails: React.FC = () => {
             </Grid>
             <Grid item xs={3}>
               <EmailInput
-                value={adverseParty.insurance.email}
+                value={adverseParty?.insurance?.email}
                 onChange={(value) =>
                   handleAdversePartyInsuranceChange('email', value)
                 }
@@ -415,11 +457,6 @@ const ClaimDetails: React.FC = () => {
             </Grid>
           </Grid>
         </Box>
-      </Grid>
-      <Grid item xs={12}>
-        <Button variant="contained" color="primary" onClick={handleSave}>
-          Save
-        </Button>
       </Grid>
     </Grid>
   );

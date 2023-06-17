@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import setupAxios from './setup/axios-setup';
 import { BrowserRouter } from 'react-router-dom';
+import GlobalErrorHandler from './components/GlobalErrorHandler/GlobalErrorHandler';
 
 setupAxios();
 
@@ -14,6 +15,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BrowserRouter>
+      <GlobalErrorHandler />
       <App />
     </BrowserRouter>
   </React.StrictMode>

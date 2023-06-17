@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import claims from './routes/claims';
 import { connect } from 'mongoose';
+// import { handleValidationErrors } from './util/handleValidationErrors';
 dotenv.config({ path: './config.env' });
 
 const app: express.Application = express();
@@ -12,6 +13,7 @@ const mongoUrl = process.env.MONGO_URI ?? 'mongodb://localhost:27017';
 
 app.use(cors());
 app.use(express.json());
+// app.use(handleValidationErrors)
 app.use('/api/claims', claims);
 
 // Server setup
