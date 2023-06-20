@@ -23,14 +23,13 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({
 }) => {
   return (
     <FormControl fullWidth={fullWidth}>
-      <InputLabel>{labelText ?? 'Phone Number'}</InputLabel>
       <PhoneInput
         value={value}
         onChange={(number) => {
           onChange(number?.toString());
         }}
-        placeholder="(999) 999-9999"
         defaultCountry="US"
+        label="Phone Number"
         inputComponent={CustomInput}
       />
     </FormControl>

@@ -17,7 +17,8 @@ import {
   Radio,
   Grid,
   Box,
-  LinearProgress
+  LinearProgress,
+  Backdrop
 } from '@mui/material';
 import { Add, Remove } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -183,9 +184,8 @@ const ClaimDetails: React.FC = () => {
     }));
   };
 
-  const handleSave = async () => {
-    // Validate form fields and save claim information
-    // Make API call to save data
+  const handleSave = async (event: any) => {
+    event.preventDefault();
 
     setSaving(true);
     const result = await updateClaim(id, {
@@ -198,267 +198,282 @@ const ClaimDetails: React.FC = () => {
     setSaving(false);
     if (isValidateErrorResponse(result)) {
       setSaveErrors(result);
+    } else {
+      setSaveErrors(undefined);
     }
   };
 
-  const justify = saveErrors ? 'space-between' : 'flex-end';
-
   return (
-    <Grid container spacing={3}>
-      <Grid item container justifyContent={justify} xs={12}>
-        {saveErrors && <ErrorDisplay error={saveErrors!} />}
-        <LoadingButton
-          loading={saving}
-          variant="contained"
-          color="primary"
-          onClick={handleSave}
-        >
-          Save
-        </LoadingButton>
-      </Grid>
-      <Grid item xs={6}>
-        <TextField
-          label="Title"
-          fullWidth
-          required
-          value={title}
-          onChange={(event) => setTitle(event.target.value)}
-        />
-      </Grid>
-      <Grid item xs={3}>
-        <DatePicker
-          disableFuture
-          label="Date of Loss"
-          value={dateOfLoss}
-          onChange={(value) => setDateOfLoss(value)}
-          slotProps={{
-            textField: {
-              id: 'dateOfLoss',
-              name: 'dateOfLoss',
-              required: true
-            }
-          }}
-        />
-      </Grid>
-      <Grid item xs={3}>
-        <FormControl fullWidth>
-          <InputLabel>Status</InputLabel>
-          <Select
-            value={status}
-            onChange={(event) => setStatus(event.target.value)}
-          >
-            <MenuItem value={ClaimStatus.UnderInvestigation}>
-              Under Investigation
-            </MenuItem>
-            <MenuItem value={ClaimStatus.ReadyForCollection}>
-              Ready for Collection
-            </MenuItem>
-            <MenuItem value={ClaimStatus.AttemptingCollection}>
-              Attempting Collection
-            </MenuItem>
-            <MenuItem value={ClaimStatus.PaidInFull}>Paid in Full</MenuItem>
-          </Select>
-        </FormControl>
-      </Grid>
-      <Grid item xs={12}>
-        <Box component="fieldset" marginBottom={2}>
-          <FormLabel component="legend">Facilities</FormLabel>
-          {facilities.map((facility, index) => (
-            <Grid container spacing={2} key={index}>
-              <Grid item xs={3}>
-                <FormControl fullWidth>
-                  <InputLabel>Type</InputLabel>
-                  <Select
-                    value={facility.type}
+    <Box component="form" onSubmit={handleSave}>
+      <Grid container spacing={3}>
+        <Grid item container justifyContent="space-between" xs={12}>
+          <Grid item container justifyContent="space-between">
+            <Grid item xs={10}>
+              <TextField
+                label="Title"
+                required
+                fullWidth
+                value={title}
+                onChange={(event) => setTitle(event.target.value)}
+              />
+            </Grid>
+            <Grid item xs={1}>
+              <LoadingButton
+                loading={saving}
+                variant="contained"
+                color="primary"
+                type="submit"
+              >
+                Save
+              </LoadingButton>
+            </Grid>
+          </Grid>
+
+          {saveErrors && <ErrorDisplay error={saveErrors!} />}
+        </Grid>
+
+        <Grid item container spacing={3} xs={12}>
+          <Grid item>
+            <FormControl>
+              <InputLabel>Status</InputLabel>
+              <Select
+                value={status}
+                onChange={(event) => setStatus(event.target.value)}
+                label="Status"
+              >
+                <MenuItem value={ClaimStatus.UnderInvestigation}>
+                  Under Investigation
+                </MenuItem>
+                <MenuItem value={ClaimStatus.ReadyForCollection}>
+                  Ready for Collection
+                </MenuItem>
+                <MenuItem value={ClaimStatus.AttemptingCollection}>
+                  Attempting Collection
+                </MenuItem>
+                <MenuItem value={ClaimStatus.PaidInFull}>Paid in Full</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item>
+            <DatePicker
+              disableFuture
+              label="Date of Loss"
+              value={dateOfLoss}
+              onChange={(value) => setDateOfLoss(value)}
+              sx={{
+                width: '150px'
+              }}
+              slotProps={{
+                textField: {
+                  id: 'dateOfLoss',
+                  name: 'dateOfLoss',
+                  required: true
+                }
+              }}
+            />
+          </Grid>
+        </Grid>
+        <Grid item xs={3}></Grid>
+        <Grid item xs={12}>
+          <Box component="fieldset" marginBottom={2}>
+            <FormLabel component="legend">Facilities</FormLabel>
+            {facilities.map((facility, index) => (
+              <Grid container spacing={2} key={index}>
+                <Grid item xs={3}>
+                  <FormControl fullWidth>
+                    <InputLabel>Type</InputLabel>
+                    <Select
+                      value={facility.type}
+                      onChange={(event) =>
+                        handleFacilityFieldChange(
+                          index,
+                          'type',
+                          event.target.value as string
+                        )
+                      }
+                    >
+                      <MenuItem value="option1">Option 1</MenuItem>
+                      <MenuItem value="option2">Option 2</MenuItem>
+                      <MenuItem value="option3">Option 3</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={3}>
+                  <TextField
+                    label="Repair Cost"
+                    type="number"
+                    value={facility.repairCost}
                     onChange={(event) =>
                       handleFacilityFieldChange(
                         index,
-                        'type',
+                        'repairCost',
                         event.target.value as string
                       )
                     }
-                  >
-                    <MenuItem value="option1">Option 1</MenuItem>
-                    <MenuItem value="option2">Option 2</MenuItem>
-                    <MenuItem value="option3">Option 3</MenuItem>
-                  </Select>
-                </FormControl>
+                  />
+                </Grid>
+                <Grid item xs={5}>
+                  <TextField
+                    label="Description"
+                    multiline
+                    rows={2}
+                    value={facility.description}
+                    onChange={(event) =>
+                      handleFacilityFieldChange(
+                        index,
+                        'description',
+                        event.target.value as string
+                      )
+                    }
+                  />
+                </Grid>
+                <Grid item xs={1}>
+                  <IconButton onClick={() => handleRemoveFacility(index)}>
+                    <Remove />
+                  </IconButton>
+                </Grid>
+              </Grid>
+            ))}
+            <IconButton onClick={handleAddFacility}>
+              <Add />
+            </IconButton>
+          </Box>
+        </Grid>
+        <Grid item xs={12}>
+          <Box component="fieldset" marginBottom={2}>
+            <FormLabel component="legend">Adverse Party</FormLabel>
+            <Grid container spacing={3}>
+              <Grid item xs={3}>
+                <TextField
+                  label="Name"
+                  value={adverseParty?.name}
+                  onChange={(event) =>
+                    handleAdversePartyFieldChange('name', event.target.value)
+                  }
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <PhoneNumberInput
+                  value={adverseParty.phoneNumber}
+                  onChange={(value) => {
+                    handleAdversePartyFieldChange('phoneNumber', value);
+                    console.log(value);
+                  }}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <EmailInput
+                  value={adverseParty?.email}
+                  onChange={(value) =>
+                    handleAdversePartyFieldChange('email', value)
+                  }
+                />
+              </Grid>{' '}
+              <Grid item xs={3}>
+                <TextField
+                  label="Address Line 1"
+                  value={adverseParty?.address?.addressLine1}
+                  onChange={(event) =>
+                    handleAdversePartyAddressChange(
+                      'addressLine1',
+                      event.target.value
+                    )
+                  }
+                />
               </Grid>
               <Grid item xs={3}>
                 <TextField
-                  label="Repair Cost"
-                  type="number"
-                  value={facility.repairCost}
+                  label="Address Line 2"
+                  value={adverseParty?.address?.addressLine2}
                   onChange={(event) =>
-                    handleFacilityFieldChange(
-                      index,
-                      'repairCost',
-                      event.target.value as string
+                    handleAdversePartyAddressChange(
+                      'addressLine2',
+                      event.target.value
                     )
                   }
                 />
               </Grid>
-              <Grid item xs={5}>
+              <Grid item xs={3}>
                 <TextField
-                  label="Description"
-                  multiline
-                  rows={2}
-                  value={facility.description}
+                  label="Unit"
+                  value={adverseParty?.address?.unit}
                   onChange={(event) =>
-                    handleFacilityFieldChange(
-                      index,
-                      'description',
-                      event.target.value as string
+                    handleAdversePartyAddressChange('unit', event.target.value)
+                  }
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <TextField
+                  label="City"
+                  value={adverseParty?.address?.city}
+                  onChange={(event) =>
+                    handleAdversePartyAddressChange('city', event.target.value)
+                  }
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <TextField
+                  label="State"
+                  value={adverseParty?.address?.state}
+                  onChange={(event) =>
+                    handleAdversePartyAddressChange('state', event.target.value)
+                  }
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <TextField
+                  label="Zip"
+                  value={adverseParty?.address?.zip}
+                  onChange={(event) =>
+                    handleAdversePartyAddressChange('zip', event.target.value)
+                  }
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <TextField
+                  label="Company Name"
+                  value={adverseParty?.insurance?.companyName}
+                  onChange={(event) =>
+                    handleAdversePartyInsuranceChange(
+                      'companyName',
+                      event.target.value
                     )
                   }
                 />
               </Grid>
-              <Grid item xs={1}>
-                <IconButton onClick={() => handleRemoveFacility(index)}>
-                  <Remove />
-                </IconButton>
+              <Grid item xs={3}>
+                <TextField
+                  label="Adjustor Name"
+                  value={adverseParty?.insurance?.adjustorName}
+                  onChange={(event) =>
+                    handleAdversePartyInsuranceChange(
+                      'adjustorName',
+                      event.target.value
+                    )
+                  }
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <PhoneNumberInput
+                  value={adverseParty?.insurance?.phoneNumber}
+                  onChange={(value) =>
+                    handleAdversePartyInsuranceChange('phoneNumber', value)
+                  }
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <EmailInput
+                  value={adverseParty?.insurance?.email}
+                  onChange={(value) =>
+                    handleAdversePartyInsuranceChange('email', value)
+                  }
+                />
               </Grid>
             </Grid>
-          ))}
-          <IconButton onClick={handleAddFacility}>
-            <Add />
-          </IconButton>
-        </Box>
+          </Box>
+        </Grid>
       </Grid>
-      <Grid item xs={12}>
-        <Box component="fieldset" marginBottom={2}>
-          <FormLabel component="legend">Adverse Party</FormLabel>
-          <Grid container spacing={3}>
-            <Grid item xs={3}>
-              <TextField
-                label="Name"
-                value={adverseParty?.name}
-                onChange={(event) =>
-                  handleAdversePartyFieldChange('name', event.target.value)
-                }
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <PhoneNumberInput
-                value={adverseParty.phoneNumber}
-                onChange={(value) => {
-                  handleAdversePartyFieldChange('phoneNumber', value);
-                  console.log(value);
-                }}
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <EmailInput
-                value={adverseParty?.email}
-                onChange={(value) =>
-                  handleAdversePartyFieldChange('email', value)
-                }
-              />
-            </Grid>{' '}
-            <Grid item xs={3}>
-              <TextField
-                label="Address Line 1"
-                value={adverseParty?.address?.addressLine1}
-                onChange={(event) =>
-                  handleAdversePartyAddressChange(
-                    'addressLine1',
-                    event.target.value
-                  )
-                }
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <TextField
-                label="Address Line 2"
-                value={adverseParty?.address?.addressLine2}
-                onChange={(event) =>
-                  handleAdversePartyAddressChange(
-                    'addressLine2',
-                    event.target.value
-                  )
-                }
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <TextField
-                label="Unit"
-                value={adverseParty?.address?.unit}
-                onChange={(event) =>
-                  handleAdversePartyAddressChange('unit', event.target.value)
-                }
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <TextField
-                label="City"
-                value={adverseParty?.address?.city}
-                onChange={(event) =>
-                  handleAdversePartyAddressChange('city', event.target.value)
-                }
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <TextField
-                label="State"
-                value={adverseParty?.address?.state}
-                onChange={(event) =>
-                  handleAdversePartyAddressChange('state', event.target.value)
-                }
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <TextField
-                label="Zip"
-                value={adverseParty?.address?.zip}
-                onChange={(event) =>
-                  handleAdversePartyAddressChange('zip', event.target.value)
-                }
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <TextField
-                label="Company Name"
-                value={adverseParty?.insurance?.companyName}
-                onChange={(event) =>
-                  handleAdversePartyInsuranceChange(
-                    'companyName',
-                    event.target.value
-                  )
-                }
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <TextField
-                label="Adjustor Name"
-                value={adverseParty?.insurance?.adjustorName}
-                onChange={(event) =>
-                  handleAdversePartyInsuranceChange(
-                    'adjustorName',
-                    event.target.value
-                  )
-                }
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <PhoneNumberInput
-                value={adverseParty?.insurance?.phoneNumber}
-                onChange={(value) =>
-                  handleAdversePartyInsuranceChange('phoneNumber', value)
-                }
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <EmailInput
-                value={adverseParty?.insurance?.email}
-                onChange={(value) =>
-                  handleAdversePartyInsuranceChange('email', value)
-                }
-              />
-            </Grid>
-          </Grid>
-        </Box>
-      </Grid>
-    </Grid>
+    </Box>
   );
 };
 

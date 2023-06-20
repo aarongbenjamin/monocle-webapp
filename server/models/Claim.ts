@@ -4,6 +4,7 @@ export interface IClaim extends Document {
   title: string;
   dateOfLoss: Date;
   createdDate: Date;
+  lastUpdatedDate: Date;
   facilities: {
     type: string;
     repairCost: string;
@@ -41,6 +42,7 @@ export const claimSchema = new Schema<IClaim>({
   title: { type: String, required: true },
   dateOfLoss: { type: Date, required: true },
   createdDate: { type: Date, required: true },
+  lastUpdatedDate: { type: Date, required: true },
   facilities: [
     {
       type: { type: String },

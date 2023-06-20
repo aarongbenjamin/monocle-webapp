@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, AlertTitle } from '@mui/material';
+import { Alert } from '@mui/material';
 import { ValidationErrorResponse } from '../../models/validationError';
 
 type ErrorDisplayProps = {
@@ -7,17 +7,7 @@ type ErrorDisplayProps = {
 };
 
 const ErrorDisplay: React.FC<ErrorDisplayProps> = ({ error }) => {
-  const { errors } = error;
-
-  return (
-    <Alert severity="error">
-      <ul>
-        {errors.map((error, index) => (
-          <li key={index}>{error.msg}</li>
-        ))}
-      </ul>
-    </Alert>
-  );
+  return <Alert severity="error">Please fix field errors</Alert>;
 };
 
 export default ErrorDisplay;

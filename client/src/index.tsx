@@ -6,6 +6,8 @@ import reportWebVitals from './reportWebVitals';
 import setupAxios from './setup/axios-setup';
 import { BrowserRouter } from 'react-router-dom';
 import GlobalErrorHandler from './components/GlobalErrorHandler/GlobalErrorHandler';
+import '@mui/material';
+import '@mui/material/styles';
 
 setupAxios();
 

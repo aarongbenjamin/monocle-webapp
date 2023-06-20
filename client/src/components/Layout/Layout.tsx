@@ -5,20 +5,24 @@ import Navbar from '../Navbar/Navbar';
 import { IsLoadingContext } from '../../providers/IsLoadingProvider';
 
 const Layout: FunctionComponent = () => {
-  const { isLoading } = useContext(IsLoadingContext);
-
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Navbar />
-      {isLoading && <LinearProgress />}
 
       <Container
+        component="div"
         sx={{
           paddingTop: 2,
           caretColor: 'transparent'
         }}
       >
-        <Outlet />
+        <div
+          style={{
+            caretColor: 'black'
+          }}
+        >
+          <Outlet />
+        </div>
       </Container>
     </Box>
   );

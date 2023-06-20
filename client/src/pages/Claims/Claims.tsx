@@ -18,7 +18,10 @@ import {
   styled,
   LinearProgress
 } from '@mui/material';
-import { standardDateFormat } from '../../util/format-date';
+import {
+  standardDateFormat,
+  standardDateTimeFormat
+} from '../../util/formatDate';
 import { useQuery } from 'react-query';
 import { IClaim } from '../../models/claim';
 import {
@@ -59,6 +62,7 @@ const Claims = () => {
           <TableRow>
             <TableCell>Title</TableCell>
             <TableCell>Date of Loss</TableCell>
+            <TableCell>Last Activity Date</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -73,7 +77,9 @@ const Claims = () => {
             >
               <TableCell className="title">{claim.title}</TableCell>
               <TableCell>{standardDateFormat(claim.dateOfLoss)}</TableCell>
-              <TableCell></TableCell>
+              <TableCell>
+                {standardDateTimeFormat(claim.lastUpdatedDate)}
+              </TableCell>
             </StyledTableRow>
           ))}
         </TableBody>

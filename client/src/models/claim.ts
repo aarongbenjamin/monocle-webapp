@@ -33,6 +33,7 @@ export interface IClaim {
   title: string;
   dateOfLoss: Date;
   createdDate: Date;
+  lastUpdatedDate: Date;
   facilities?: Facility[];
   adverseParty?: AdverseParty;
   status: ClaimStatus;

@@ -16,6 +16,7 @@ export default {
       title,
       dateOfLoss,
       createdDate: Date.now(),
+      lastUpdatedDate: Date.now(),
       status: ClaimStatus.UnderInvestigation
     });
     const validationError = claim.validateSync();
@@ -54,17 +55,23 @@ export default {
     }
   },
   getClaims: async (): Promise<IClaim[]> => {
-    const claims = await Claim.find().sort({ dateOfLoss: 'desc' }).exec();
+    const claims = await Claim.find().sort({ lastUpdatedDate: 'desc' }).exec();
 
     return claims;
   },
   updateClaimById: async (
     id: string,
-    update: Partial<IClaim>
+    claim: Partial<IClaim>
   ): Promise<IClaim | null> => {
     try {
-      const claim = await Claim.findByIdAndUpdate(id, update, { new: true });
-      return claim ? claim.toObject<IClaim>() : null;
+      const claimUpdate: Partial<IClaim> = {
+        ...claim,
+        lastUpdatedDate: new Date()
+      };
+      const updatedClaim = await Claim.findByIdAndUpdate(id, claimUpdate, {
+        new: true
+      });
+      return updatedClaim ? updatedClaim.toObject<IClaim>() : null;
     } catch (error) {
       throw error;
     }
