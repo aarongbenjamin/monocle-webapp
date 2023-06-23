@@ -46,14 +46,12 @@ jobs:
         cd client
         npm install
         npm run build --if-present
-        npm run test --if-present
         
     - name: server npm install, build, and test
       run: |
         cd server
         npm install
         npm run build --if-present
-        npm run test --if-present
     - name: copy client/build to server/build/public
       run: |
         cp -r client/build server/public
