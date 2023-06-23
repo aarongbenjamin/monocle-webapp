@@ -1,13 +1,7 @@
-import React, {
-  FunctionComponent,
-  useCallback,
-  useContext,
-  useEffect,
-  useState
-} from 'react';
-import axios from 'axios';
 import {
-  CircularProgress,
+  useContext,
+  useEffect} from 'react';
+import {
   Paper,
   Table,
   TableBody,
@@ -15,19 +9,14 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  styled,
-  LinearProgress
-} from '@mui/material';
+  styled} from '@mui/material';
 import {
   standardDateFormat,
   standardDateTimeFormat
 } from '../../util/formatDate';
 import { useQuery } from 'react-query';
-import { IClaim } from '../../models/claim';
 import {
-  ClaimsContext,
-  SelectedClaimContext
-} from '../../providers/ClaimsProvider';
+  ClaimsContext} from '../../providers/ClaimsProvider';
 import { useNavigate } from 'react-router-dom';
 import { NavBarTitleContext } from '../../providers/NavbarTitleProvider';
 import { fetchClaims } from '../../api/claims/ClaimsAPI';
