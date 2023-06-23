@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import {
   Button,
   TextField,
@@ -38,6 +39,8 @@ import {
   ValidationErrorResponse
 } from '../../models/validationError';
 import { LoadingButton } from '@mui/lab';
+import { red } from '@mui/material/colors';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const useClaimDetails = () => {
   // State for managing form data
@@ -84,6 +87,7 @@ const useClaimDetails = () => {
 
 // Main claim form component
 const ClaimDetails: React.FC = () => {
+  const navigate = useNavigate();
   const { setIsLoading } = useContext(IsLoadingContext);
   const [saveErrors, setSaveErrors] = useState<
     ValidationErrorResponse | undefined
@@ -204,20 +208,14 @@ const ClaimDetails: React.FC = () => {
   };
 
   return (
-    <Box component="form" onSubmit={handleSave}>
-      <Grid container spacing={3}>
-        <Grid item container justifyContent="space-between" xs={12}>
-          <Grid item container justifyContent="space-between">
-            <Grid item xs={10}>
-              <TextField
-                label="Title"
-                required
-                fullWidth
-                value={title}
-                onChange={(event) => setTitle(event.target.value)}
-              />
-            </Grid>
-            <Grid item xs={1}>
+    <Box component="form"  onSubmit={handleSave}>
+      <Grid container justifyContent='space-between' xs={12}>
+      <Grid item>
+        <IconButton aria-label='Go Back' onClick={() => navigate('/claims')}>
+        <ArrowBackIcon />
+      </IconButton>
+      </Grid>
+              <Grid item> 
               <LoadingButton
                 loading={saving}
                 variant="contained"
@@ -226,6 +224,19 @@ const ClaimDetails: React.FC = () => {
               >
                 Save
               </LoadingButton>
+              </Grid>
+            </Grid>
+      <Grid container spacing={3} sx={{ mt: '1px' }}>
+        <Grid item container justifyContent="space-between" xs={12}>
+          <Grid item container justifyContent="space-between">
+            <Grid item xs={12}>
+              <TextField
+                label="Title"
+                required
+                fullWidth
+                value={title}
+                onChange={(event) => setTitle(event.target.value)}
+              />
             </Grid>
           </Grid>
 

@@ -7,10 +7,10 @@ docker pull mongo
 ```
 
 ```
-docker run
--d
---name mongo-local
--p 27017:27017
+docker run \
+-d \
+--name mongo-local \
+-p 27017:27017 \
 mongo
 ```
 
