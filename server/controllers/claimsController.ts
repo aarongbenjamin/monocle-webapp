@@ -1,7 +1,6 @@
 import { HttpStatusCode } from 'axios';
-import dayjs from 'dayjs';
 import { Request, Response } from 'express';
-import { check, param, ValidationChain } from 'express-validator';
+import { check, param } from 'express-validator';
 import { Error as MongooseError } from 'mongoose';
 import { IClaim } from '../models/Claim';
 import claimsService from '../services/claimsService';
