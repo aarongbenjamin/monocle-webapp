@@ -31,6 +31,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { NavBarTitleContext } from '../../providers/NavbarTitleProvider';
 import { fetchClaims } from '../../api/claims/ClaimsAPI';
+import { IsLoadingContext } from '../../providers/IsLoadingProvider';
 
 const StyledTableRow = styled(TableRow)`
   &:hover {
@@ -47,8 +48,14 @@ const Claims = () => {
   const { claims, setClaims } = useContext(ClaimsContext);
   const { setNavbarTitle: setTitle } = useContext(NavBarTitleContext);
 
+  const { setIsLoading } = useContext(IsLoadingContext);
   const navigate = useNavigate();
-  const { isLoading } = useQuery('ClaimsList', fetchClaims, {
+  useQuery('ClaimsList', async () => {
+    setIsLoading(true);
+    const data = await fetchClaims();
+    setIsLoading(false);
+    return data;
+  }, {
     onSuccess: (data) => {
       if (!data ) {
         setClaims([]);
@@ -59,9 +66,7 @@ const Claims = () => {
   });
   useEffect(() => setTitle('Claims'));
 
-  return isLoading ? (
-    <LinearProgress />
-  ) : (
+  return (
     <TableContainer component={Paper}>
       <Table>
         <TableHead>
