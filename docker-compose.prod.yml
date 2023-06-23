@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  claims-management:
+    build:
+      target: production
+    container_name: claims-management
+    volumes: []
+    environment:
+      - ENVIRONMENT=production
+    command: node /usr/src/app/build/server.js
+  mongo-local:
+    image: mongo
+    container_name: mongo-local-app
+    ports:
+      - '27017:27017'

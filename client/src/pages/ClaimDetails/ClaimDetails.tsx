@@ -283,6 +283,7 @@ const ClaimDetails: React.FC = () => {
                   <FormControl fullWidth>
                     <InputLabel>Type</InputLabel>
                     <Select
+                      label="Type"
                       value={facility.type}
                       onChange={(event) =>
                         handleFacilityFieldChange(

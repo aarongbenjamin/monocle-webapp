@@ -1,0 +1,24 @@
+version: '3.7'
+
+services:
+  claims-management:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+      target: dev
+    volumes:
+      - ./server:/usr/src/dev-app
+      - ./server/nodemon.json:/usr/src/dev-app/nodemon.json
+    container_name: claims-management
+    expose:
+      - '5000'
+    ports:
+      - '5000:5000'
+    environment:
+      - MONGO_URI=mongodb://mongo-local:27017
+    command: npm run start
+  mongo-local:
+    image: mongo
+    container_name: mongo-local-app
+    ports:
+      - '27017:27017'
