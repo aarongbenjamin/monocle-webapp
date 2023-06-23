@@ -15,7 +15,7 @@ import StartClaimModal, {
   CloseAction
 } from '../StartClaimModal/StartClaimModal';
 import { NavBarTitleContext } from '../../providers/NavbarTitleProvider';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { IsLoadingContext } from '../../providers/IsLoadingProvider';
 
 const Navbar = () => {

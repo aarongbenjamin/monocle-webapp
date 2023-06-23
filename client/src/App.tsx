@@ -1,11 +1,4 @@
-import React, { useEffect } from 'react';
-import {
-  BrowserRouter,
-  Navigate,
-  Route,
-  Routes,
-  useNavigate
-} from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Claims from './pages/Claims/Claims';
 import Layout from './components/Layout/Layout';
@@ -14,7 +7,6 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import ContextProviders from './Providers';
 import ClaimDetails from './pages/ClaimDetails/ClaimDetails';
-import GlobalErrorHandler from './components/GlobalErrorHandler/GlobalErrorHandler';
 const client = new QueryClient();
 function App() {
   return (

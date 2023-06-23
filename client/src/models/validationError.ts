@@ -7,6 +7,7 @@ export type ValidationErrorResponse = {
 };
 
 export const isValidateErrorResponse = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any
 ): data is ValidationErrorResponse => {
   return data.errors !== undefined;

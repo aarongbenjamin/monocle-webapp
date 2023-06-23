@@ -1,8 +1,7 @@
-import React, { FunctionComponent, useContext, useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
-import { Box, Container, LinearProgress } from '@mui/material';
+import { FunctionComponent } from 'react';
+import { Outlet } from 'react-router-dom';
+import { Box, Container } from '@mui/material';
 import Navbar from '../Navbar/Navbar';
-import { IsLoadingContext } from '../../providers/IsLoadingProvider';
 
 const Layout: FunctionComponent = () => {
   return (

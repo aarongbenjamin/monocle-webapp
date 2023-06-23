@@ -7,6 +7,7 @@ export const ClaimsContext = createContext<{
   setClaims: React.Dispatch<React.SetStateAction<IClaim[]>>;
 }>({
   claims: [],
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setClaims: () => {}
 });
 export const SelectedClaimContext = createContext<{
@@ -14,6 +15,7 @@ export const SelectedClaimContext = createContext<{
   selectedClaim: IClaim | null;
 }>({
   selectedClaim: null,
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setSelectedClaim: () => {}
 });
 

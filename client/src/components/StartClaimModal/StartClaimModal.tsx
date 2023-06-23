@@ -10,9 +10,6 @@ export enum CloseAction {
 }
 type StartClaimModalProps = {
   open: boolean;
-  onClose?:
-    | ((event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void)
-    | undefined;
   closeModal: (action: CloseAction, newClaimId: string | undefined) => void;
 };
 const StartClaimModal = ({ open, closeModal }: StartClaimModalProps) => {
@@ -38,7 +35,6 @@ const StartClaimModal = ({ open, closeModal }: StartClaimModalProps) => {
   return (
     <Modal
       open={open}
-      // onClose={onClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
