@@ -1,25 +1,15 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import React, { FormEvent, useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
-  Button,
   TextField,
   Select,
   MenuItem,
   FormControl,
   InputLabel,
-  Input,
-  InputAdornment,
   IconButton,
-  FormControlLabel,
-  Checkbox,
-  FormGroup,
   FormLabel,
-  RadioGroup,
-  Radio,
   Grid,
-  Box,
-  LinearProgress,
-  Backdrop
+  Box
 } from '@mui/material';
 import { Add, Remove } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -29,7 +19,6 @@ import EmailInput from '../../components/EmailInput/EmailInput';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { fetchClaimById, updateClaim } from '../../api/claims/ClaimsAPI';
-import { useDateTimeField } from '@mui/x-date-pickers/DateTimeField/useDateTimeField';
 import dayjs, { Dayjs } from 'dayjs';
 import { AdverseParty, ClaimStatus, Facility } from '../../models/claim';
 import { IsLoadingContext } from '../../providers/IsLoadingProvider';
@@ -39,7 +28,6 @@ import {
   ValidationErrorResponse
 } from '../../models/validationError';
 import { LoadingButton } from '@mui/lab';
-import { red } from '@mui/material/colors';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const useClaimDetails = () => {
@@ -93,7 +81,6 @@ const ClaimDetails: React.FC = () => {
     ValidationErrorResponse | undefined
   >();
   const [saving, setSaving] = useState(false);
-  useEffect(() => {});
   const { id } = useParams<{ id: string }>();
   const {
     title,
@@ -188,7 +175,7 @@ const ClaimDetails: React.FC = () => {
     }));
   };
 
-  const handleSave = async (event: any) => {
+  const handleSave = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     setSaving(true);
@@ -208,24 +195,24 @@ const ClaimDetails: React.FC = () => {
   };
 
   return (
-    <Box component="form"  onSubmit={handleSave}>
-      <Grid container justifyContent='space-between' xs={12}>
-      <Grid item>
-        <IconButton aria-label='Go Back' onClick={() => navigate('/claims')}>
-        <ArrowBackIcon />
-      </IconButton>
+    <Box component="form" onSubmit={handleSave}>
+      <Grid container justifyContent="space-between" xs={12}>
+        <Grid item>
+          <IconButton aria-label="Go Back" onClick={() => navigate('/claims')}>
+            <ArrowBackIcon />
+          </IconButton>
+        </Grid>
+        <Grid item>
+          <LoadingButton
+            loading={saving}
+            variant="contained"
+            color="primary"
+            type="submit"
+          >
+            Save
+          </LoadingButton>
+        </Grid>
       </Grid>
-              <Grid item> 
-              <LoadingButton
-                loading={saving}
-                variant="contained"
-                color="primary"
-                type="submit"
-              >
-                Save
-              </LoadingButton>
-              </Grid>
-            </Grid>
       <Grid container spacing={3} sx={{ mt: '1px' }}>
         <Grid item container justifyContent="space-between" xs={12}>
           <Grid item container justifyContent="space-between">
@@ -240,7 +227,7 @@ const ClaimDetails: React.FC = () => {
             </Grid>
           </Grid>
 
-          {saveErrors && <ErrorDisplay error={saveErrors!} />}
+          {saveErrors && <ErrorDisplay error={saveErrors} />}
         </Grid>
 
         <Grid item container spacing={3} xs={12}>
@@ -294,6 +281,7 @@ const ClaimDetails: React.FC = () => {
                   <FormControl fullWidth>
                     <InputLabel>Type</InputLabel>
                     <Select
+                      label="Type"
                       value={facility.type}
                       onChange={(event) =>
                         handleFacilityFieldChange(

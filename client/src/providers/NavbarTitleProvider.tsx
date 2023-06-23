@@ -5,6 +5,7 @@ export const NavBarTitleContext = createContext<{
   setNavbarTitle: React.Dispatch<React.SetStateAction<string>>;
 }>({
   title: 'Home',
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setNavbarTitle: () => {}
 });
 

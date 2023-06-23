@@ -1,6 +1,6 @@
 export interface INewClaimRequest {
-  title: string;
-  dateOfLoss: Date;
+  title?: string;
+  dateOfLoss?: Date;
 }
 export type AdverseParty = {
   name?: string;

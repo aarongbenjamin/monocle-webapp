@@ -1,11 +1,5 @@
 import { Claim, ClaimStatus, IClaim } from '../models/Claim';
-import {
-  model,
-  Error as MongooseError,
-  Types,
-  Document,
-  ObjectId
-} from 'mongoose';
+import { Error as MongooseError, Types, Document, ObjectId } from 'mongoose';
 
 export default {
   startClaim: async (
@@ -31,7 +25,7 @@ export default {
   getClaimById: async (id: string): Promise<IClaim | null> => {
     const claimId = id;
     let document:
-      | (Document<ObjectId, {}, IClaim> &
+      | (Document<ObjectId, object, IClaim> &
           Omit<
             IClaim & {
               _id: Types.ObjectId;
@@ -63,17 +57,13 @@ export default {
     id: string,
     claim: Partial<IClaim>
   ): Promise<IClaim | null> => {
-    try {
-      const claimUpdate: Partial<IClaim> = {
-        ...claim,
-        lastUpdatedDate: new Date()
-      };
-      const updatedClaim = await Claim.findByIdAndUpdate(id, claimUpdate, {
-        new: true
-      });
-      return updatedClaim ? updatedClaim.toObject<IClaim>() : null;
-    } catch (error) {
-      throw error;
-    }
+    const claimUpdate: Partial<IClaim> = {
+      ...claim,
+      lastUpdatedDate: new Date()
+    };
+    const updatedClaim = await Claim.findByIdAndUpdate(id, claimUpdate, {
+      new: true
+    });
+    return updatedClaim ? updatedClaim.toObject<IClaim>() : null;
   }
 };

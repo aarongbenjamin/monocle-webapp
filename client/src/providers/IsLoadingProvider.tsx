@@ -5,6 +5,7 @@ export const IsLoadingContext = createContext<{
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }>({
   isLoading: false,
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setIsLoading: () => {}
 });
 
