@@ -49,7 +49,13 @@ const Claims = () => {
 
   const navigate = useNavigate();
   const { isLoading } = useQuery('ClaimsList', fetchClaims, {
-    onSuccess: setClaims
+    onSuccess: (data) => {
+      if (!data ) {
+        setClaims([]);
+      } else {
+        setClaims(data);
+      }
+    }
   });
   useEffect(() => setTitle('Claims'));
 
