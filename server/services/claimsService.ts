@@ -2,13 +2,8 @@ import { Claim, ClaimStatus, IClaim } from '../models/Claim';
 import { Error as MongooseError, Types, Document, ObjectId } from 'mongoose';
 
 export default {
-  startClaim: async (
-    title: string,
-    dateOfLoss: Date
-  ): Promise<IClaim | MongooseError.ValidationError> => {
+  startClaim: async (): Promise<IClaim | MongooseError.ValidationError> => {
     const claim = new Claim({
-      title,
-      dateOfLoss,
       createdDate: Date.now(),
       lastUpdatedDate: Date.now(),
       status: ClaimStatus.UnderInvestigation

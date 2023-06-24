@@ -6,16 +6,8 @@ import { IClaim } from '../models/Claim';
 import claimsService from '../services/claimsService';
 import validateResults from '../util/validateResults';
 
-export const startClaimValidations = [
-  check(['title', 'dateOfLoss'])
-    .notEmpty()
-    .withMessage('Field cannot be empty'),
-  check('dateOfLoss').isISO8601().withMessage('Invalid datetime format'),
-  validateResults
-];
 export const startClaim = async (req: Request, res: Response) => {
-  const { title, dateOfLoss } = req.body;
-  const result = await claimsService.startClaim(title, dateOfLoss);
+  const result = await claimsService.startClaim();
 
   if (result instanceof MongooseError.ValidationError) {
     res.status(HttpStatusCode.BadRequest);
@@ -50,10 +42,6 @@ export const getClaims = async (req: Request, res: Response) => {
 
 export const updateClaimValidations = [
   param('claimId').notEmpty().isString(),
-  check(['title', 'dateOfLoss'])
-    .notEmpty()
-    .withMessage('Field cannot be empty'),
-  check('dateOfLoss').isISO8601().withMessage('Invalid datetime format'),
   validateResults
 ];
 export const updateClaimById = async (
