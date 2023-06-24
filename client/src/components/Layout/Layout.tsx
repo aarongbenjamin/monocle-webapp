@@ -11,15 +11,10 @@ const Layout: FunctionComponent = () => {
       <Container
         component="div"
         sx={{
-          paddingTop: 2,
-          caretColor: 'transparent'
+          paddingTop: 2
         }}
       >
-        <div
-          style={{
-            caretColor: 'black'
-          }}
-        >
+        <div>
           <Outlet />
         </div>
       </Container>

@@ -11,9 +11,6 @@ import {
   Typography
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import StartClaimModal, {
-  CloseAction
-} from '../StartClaimModal/StartClaimModal';
 import { NavBarTitleContext } from '../../providers/NavbarTitleProvider';
 import { useNavigate } from 'react-router-dom';
 import { IsLoadingContext } from '../../providers/IsLoadingProvider';
@@ -31,22 +28,9 @@ const Navbar = () => {
       navigate(navigatePath);
     }
   };
-  const [openStartClaimModal, setOpenStartClaimModal] = useState(false);
   const { isLoading } = useContext(IsLoadingContext);
   const { title } = useContext(NavBarTitleContext);
 
-  const handleStartClaimClick = () => {
-    setOpenStartClaimModal(true);
-  };
-  const handleStartClaimClickClose = (
-    action: CloseAction,
-    newClaimId: string | undefined
-  ) => {
-    setOpenStartClaimModal(false);
-    if (action === CloseAction.Save) {
-      navigate(`/claims/${newClaimId}`);
-    }
-  };
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -71,19 +55,12 @@ const Navbar = () => {
             }}
           >
             <MenuItem onClick={() => handleMenuClose('/claims')}>
-              Claims
+              Claim Search
             </MenuItem>
           </Menu>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {title}
           </Typography>
-          <Button color="inherit" onClick={handleStartClaimClick}>
-            Start Claim
-          </Button>
-          <StartClaimModal
-            open={openStartClaimModal}
-            closeModal={handleStartClaimClickClose}
-          />
         </Toolbar>
       </AppBar>
       {isLoading && <LinearProgress />}

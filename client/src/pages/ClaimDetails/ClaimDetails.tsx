@@ -32,7 +32,6 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const useClaimDetails = () => {
   // State for managing form data
-  const [title, setTitle] = useState('');
   const [dateOfLoss, setDateOfLoss] = useState<Dayjs | null>(null);
   const [facilities, setFacilities] = useState<Facility[]>([
     { type: '', description: '', repairCost: '' }
@@ -60,12 +59,10 @@ const useClaimDetails = () => {
   const [status, setStatus] = useState<ClaimStatus | string>('');
 
   return {
-    title,
     dateOfLoss,
     facilities,
     adverseParty,
     status,
-    setTitle,
     setDateOfLoss,
     setFacilities,
     setAdverseParty,
@@ -83,12 +80,10 @@ const ClaimDetails: React.FC = () => {
   const [saving, setSaving] = useState(false);
   const { id } = useParams<{ id: string }>();
   const {
-    title,
     dateOfLoss,
     facilities,
     adverseParty,
     status,
-    setTitle,
     setDateOfLoss,
     setAdverseParty,
     setStatus,
@@ -112,8 +107,9 @@ const ClaimDetails: React.FC = () => {
     },
     {
       onSuccess: (data) => {
-        setTitle(data.title);
-        setDateOfLoss(dayjs(data.dateOfLoss));
+        if (data.dateOfLoss) {
+          setDateOfLoss(dayjs(data.dateOfLoss));
+        }
         setStatus(data.status);
         setAdverseParty(data.adverseParty ?? {});
         setFacilities(data.facilities ?? [{}]);
@@ -180,7 +176,6 @@ const ClaimDetails: React.FC = () => {
 
     setSaving(true);
     const result = await updateClaim(id, {
-      title,
       dateOfLoss: dateOfLoss?.toDate(),
       facilities,
       adverseParty,
@@ -215,18 +210,6 @@ const ClaimDetails: React.FC = () => {
       </Grid>
       <Grid container spacing={3} sx={{ mt: '1px' }}>
         <Grid item container justifyContent="space-between" xs={12}>
-          <Grid item container justifyContent="space-between">
-            <Grid item xs={12}>
-              <TextField
-                label="Title"
-                required
-                fullWidth
-                value={title}
-                onChange={(event) => setTitle(event.target.value)}
-              />
-            </Grid>
-          </Grid>
-
           {saveErrors && <ErrorDisplay error={saveErrors} />}
         </Grid>
 
@@ -259,7 +242,7 @@ const ClaimDetails: React.FC = () => {
               value={dateOfLoss}
               onChange={(value) => setDateOfLoss(value)}
               sx={{
-                width: '150px'
+                width: '175px'
               }}
               slotProps={{
                 textField: {

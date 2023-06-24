@@ -1,7 +1,3 @@
-export interface INewClaimRequest {
-  title?: string;
-  dateOfLoss?: Date;
-}
 export type AdverseParty = {
   name?: string;
   phoneNumber?: string;
@@ -30,8 +26,7 @@ export type Facility = {
 
 export interface IClaim {
   _id: string;
-  title: string;
-  dateOfLoss: Date;
+  dateOfLoss?: Date;
   createdDate: Date;
   lastUpdatedDate: Date;
   facilities?: Facility[];

@@ -2,6 +2,11 @@ import axios, { AxiosError } from 'axios';
 import { IClaim } from '../../models/claim';
 import { ValidationErrorResponse } from '../../models/validationError';
 
+export const createClaim = async () => {
+  const response = await axios.post<IClaim>('/api/claims');
+
+  return response.data;
+};
 export const fetchClaims = async () => {
   const response = await axios.get<IClaim[]>('/api/claims');
 
