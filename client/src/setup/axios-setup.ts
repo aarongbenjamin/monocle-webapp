@@ -1,5 +1,7 @@
-import axios from "axios";
+import axios from 'axios';
 
 export default function setupAxios() {
-    axios.defaults.baseURL = process.env.BACKEND_URL ?? 'http://localhost:5000'
+  if (process.env.NODE_ENV === 'development') {
+    axios.defaults.baseURL = 'http://localhost:5000';
+  }
 }
