@@ -58,11 +58,13 @@ jobs:
     - name: copy files to app folder
       run: |
         mkdir app
-        cp -r server/build app
-        cp -r client/build app/public
-        cp -r server/node_modules app/node_modules
-        cd app 
-        ls
+        cp -r server/build ./app
+        cp -r client/build ./app/public
+        cp -r server/node_modules ./app/node_modules
+        cp package.json ./app
+        cp package-lock.json ./app
+        cd app
+        ls 
     - name: 'Deploy to Azure WebApp'
       id: deploy-to-webapp
       uses: azure/webapps-deploy@v2
