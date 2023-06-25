@@ -9,7 +9,8 @@ import {
   IconButton,
   FormLabel,
   Grid,
-  Box
+  Box,
+  Modal
 } from '@mui/material';
 import { Add, Remove } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -29,9 +30,11 @@ import {
 } from '../../models/validationError';
 import { LoadingButton } from '@mui/lab';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ReactRouterPrompt from 'react-router-prompt';
 
 const useClaimDetails = () => {
   // State for managing form data
+  const [isDirty, setIsDirty] = useState(false);
   const [dateOfLoss, setDateOfLoss] = useState<Dayjs | null>(null);
   const [facilities, setFacilities] = useState<Facility[]>([
     { type: '', description: '', repairCost: '' }
@@ -57,67 +60,6 @@ const useClaimDetails = () => {
   });
 
   const [status, setStatus] = useState<ClaimStatus | string>('');
-
-  return {
-    dateOfLoss,
-    facilities,
-    adverseParty,
-    status,
-    setDateOfLoss,
-    setFacilities,
-    setAdverseParty,
-    setStatus
-  };
-};
-
-// Main claim form component
-const ClaimDetails: React.FC = () => {
-  const navigate = useNavigate();
-  const { setIsLoading } = useContext(IsLoadingContext);
-  const [saveErrors, setSaveErrors] = useState<
-    ValidationErrorResponse | undefined
-  >();
-  const [saving, setSaving] = useState(false);
-  const { id } = useParams<{ id: string }>();
-  const {
-    dateOfLoss,
-    facilities,
-    adverseParty,
-    status,
-    setDateOfLoss,
-    setAdverseParty,
-    setStatus,
-    setFacilities
-  } = useClaimDetails();
-
-  if (!id) {
-    throw new Error('id is empty for ClaimDetails');
-  }
-
-  const { setNavbarTitle } = useContext(NavBarTitleContext);
-  useEffect(() => setNavbarTitle(`Claim - ${id}`));
-
-  useQuery(
-    id,
-    async () => {
-      setIsLoading(true);
-      const data = await fetchClaimById(id);
-      setIsLoading(false);
-      return data;
-    },
-    {
-      onSuccess: (data) => {
-        if (data.dateOfLoss) {
-          setDateOfLoss(dayjs(data.dateOfLoss));
-        }
-        setStatus(data.status);
-        setAdverseParty(data.adverseParty ?? {});
-        setFacilities(data.facilities ?? [{}]);
-      },
-      refetchOnWindowFocus: false
-    }
-  );
-
   const handleFacilityFieldChange = (
     index: number,
     field: string,
@@ -160,7 +102,6 @@ const ClaimDetails: React.FC = () => {
       }
     }));
   };
-
   const handleAdversePartyInsuranceChange = (field: string, value?: string) => {
     setAdverseParty((prevState) => ({
       ...prevState,
@@ -170,6 +111,78 @@ const ClaimDetails: React.FC = () => {
       }
     }));
   };
+
+  return {
+    dateOfLoss,
+    facilities,
+    adverseParty,
+    status,
+    setDateOfLoss,
+    setStatus,
+    setAdverseParty,
+    setFacilities,
+    handleAddFacility,
+    handleAdversePartyAddressChange,
+    handleAdversePartyFieldChange,
+    handleAdversePartyInsuranceChange,
+    handleRemoveFacility,
+    handleFacilityFieldChange
+  };
+};
+
+// Main claim form component
+const ClaimDetails: React.FC = () => {
+  const navigate = useNavigate();
+  const { setIsLoading } = useContext(IsLoadingContext);
+  const [saveErrors, setSaveErrors] = useState<
+    ValidationErrorResponse | undefined
+  >();
+  const [saving, setSaving] = useState(false);
+  const { id } = useParams<{ id: string }>();
+  const {
+    dateOfLoss,
+    facilities,
+    adverseParty,
+    status,
+    setDateOfLoss,
+    setStatus,
+    setAdverseParty,
+    setFacilities,
+    handleAddFacility,
+    handleAdversePartyAddressChange,
+    handleAdversePartyFieldChange,
+    handleAdversePartyInsuranceChange,
+    handleRemoveFacility,
+    handleFacilityFieldChange
+  } = useClaimDetails();
+
+  if (!id) {
+    throw new Error('id is empty for ClaimDetails');
+  }
+
+  const { setNavbarTitle } = useContext(NavBarTitleContext);
+  useEffect(() => setNavbarTitle(`Claim - ${id}`));
+
+  useQuery(
+    id,
+    async () => {
+      setIsLoading(true);
+      const data = await fetchClaimById(id);
+      setIsLoading(false);
+      return data;
+    },
+    {
+      onSuccess: (data) => {
+        if (data.dateOfLoss) {
+          setDateOfLoss(dayjs(data.dateOfLoss));
+        }
+        setStatus(data.status);
+        setAdverseParty(data.adverseParty ?? {});
+        setFacilities(data.facilities ?? [{}]);
+      },
+      refetchOnWindowFocus: false
+    }
+  );
 
   const handleSave = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -191,6 +204,17 @@ const ClaimDetails: React.FC = () => {
 
   return (
     <Box component="form" onSubmit={handleSave}>
+      <ReactRouterPrompt when={true}>
+        {({ isActive, onConfirm, onCancel }) => (
+          <Modal open={isActive}>
+            <div>
+              <p>Do you really want to leave?</p>
+              <button onClick={onCancel}>Cancel</button>
+              <button onClick={onConfirm}>Ok</button>
+            </div>
+          </Modal>
+        )}
+      </ReactRouterPrompt>
       <Grid container justifyContent="space-between" xs={12}>
         <Grid item>
           <IconButton aria-label="Go Back" onClick={() => navigate('/claims')}>

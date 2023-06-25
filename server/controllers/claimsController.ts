@@ -1,6 +1,6 @@
 import { HttpStatusCode } from 'axios';
 import { Request, Response } from 'express';
-import { check, param } from 'express-validator';
+import { param } from 'express-validator';
 import { Error as MongooseError } from 'mongoose';
 import { IClaim } from '../models/Claim';
 import claimsService from '../services/claimsService';

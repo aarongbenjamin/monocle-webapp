@@ -22,6 +22,7 @@
     "react-dom": "^18.2.0",
     "react-phone-number-input": "^3.2.23",
     "react-query": "^3.39.3",
+    "react-router-prompt": "^0.5.4",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
@@ -51,5 +52,19 @@
     "eslint": "^8.43.0",
     "react-router-dom": "^6.10.0",
     "typescript": "^4.9.5"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "ignorePatterns": [
+      "**/build"
+    ],
+    "root": true
   }
 }
