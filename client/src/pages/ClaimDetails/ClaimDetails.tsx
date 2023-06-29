@@ -62,39 +62,44 @@ const ClaimDetails: React.FC = () => {
   >();
   const [saving, setSaving] = useState(false);
 
-  const { register, handleSubmit, formState, control, setValue } =
-    useForm<ClaimFormData>({
-      defaultValues: async () => {
-        setIsLoading(true);
-        const data = await fetchClaimById(id);
-        setIsLoading(false);
-        return {
-          dateOfLoss: dayjs(data.dateOfLoss),
-          lastUpdatedDate: data.lastUpdatedDate,
-          facilities: data.facilities || [],
-          adverseParty: {
-            name: data.adverseParty?.name || '',
-            phoneNumber: data.adverseParty?.phoneNumber || '',
-            email: data.adverseParty?.email || '',
-            address: {
-              addressLine1: data.adverseParty?.address?.addressLine1 || '',
-              addressLine2: data.adverseParty?.address?.addressLine2 || '',
-              unit: data.adverseParty?.address?.unit || '',
-              city: data.adverseParty?.address?.city || '',
-              state: data.adverseParty?.address?.state || '',
-              zip: data.adverseParty?.address?.zip || ''
-            },
-            insurance: {
-              companyName: data.adverseParty?.insurance?.companyName || '',
-              adjustorName: data.adverseParty?.insurance?.adjustorName || '',
-              phoneNumber: data.adverseParty?.insurance?.phoneNumber || '',
-              email: data.adverseParty?.insurance?.email || ''
-            }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+    setValue
+  } = useForm<ClaimFormData>({
+    defaultValues: async () => {
+      setIsLoading(true);
+      const data = await fetchClaimById(id);
+      setIsLoading(false);
+      return {
+        dateOfLoss: dayjs(data.dateOfLoss),
+        lastUpdatedDate: data.lastUpdatedDate,
+        facilities: data.facilities || [],
+        adverseParty: {
+          name: data.adverseParty?.name || '',
+          phoneNumber: data.adverseParty?.phoneNumber || '',
+          email: data.adverseParty?.email || '',
+          address: {
+            addressLine1: data.adverseParty?.address?.addressLine1 || '',
+            addressLine2: data.adverseParty?.address?.addressLine2 || '',
+            unit: data.adverseParty?.address?.unit || '',
+            city: data.adverseParty?.address?.city || '',
+            state: data.adverseParty?.address?.state || '',
+            zip: data.adverseParty?.address?.zip || ''
           },
-          status: data.status
-        };
-      }
-    });
+          insurance: {
+            companyName: data.adverseParty?.insurance?.companyName || '',
+            adjustorName: data.adverseParty?.insurance?.adjustorName || '',
+            phoneNumber: data.adverseParty?.insurance?.phoneNumber || '',
+            email: data.adverseParty?.insurance?.email || ''
+          }
+        },
+        status: data.status
+      };
+    }
+  });
   const {
     fields,
     append: appendFacility,
@@ -310,7 +315,20 @@ const ClaimDetails: React.FC = () => {
                 <Controller
                   name="adverseParty.email"
                   control={control}
-                  render={({ field }) => <TextField label="Email" {...field} />}
+                  rules={{
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: 'Invalid email address'
+                    }
+                  }}
+                  render={({ field, formState: { errors } }) => (
+                    <TextField
+                      label="Email"
+                      {...field}
+                      error={!!errors.adverseParty?.email}
+                      helperText={errors.adverseParty?.email?.message}
+                    />
+                  )}
                 />
               </Grid>
 
@@ -389,7 +407,20 @@ const ClaimDetails: React.FC = () => {
                 <Controller
                   name="adverseParty.insurance.email"
                   control={control}
-                  render={({ field }) => <TextField label="Email" {...field} />}
+                  rules={{
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: 'Invalid email address'
+                    }
+                  }}
+                  render={({ field }) => (
+                    <TextField
+                      label="Email"
+                      {...field}
+                      error={!!errors.adverseParty?.email}
+                      helperText={errors.adverseParty?.email?.message}
+                    />
+                  )}
                 />
               </Grid>
             </Grid>
