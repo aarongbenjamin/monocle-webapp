@@ -1,4 +1,4 @@
-import React, { FormEvent, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   TextField,
@@ -9,24 +9,16 @@ import {
   IconButton,
   FormLabel,
   Grid,
-  Box,
-  Modal
+  Box
 } from '@mui/material';
 import { Add, Remove } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { NavBarTitleContext } from '../../providers/NavbarTitleProvider';
 import PhoneNumberInput from '../../components/PhoneNumberInput/PhoneNumberInput';
-import EmailInput from '../../components/EmailInput/EmailInput';
-import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { fetchClaimById, updateClaim } from '../../api/claims/ClaimsAPI';
 import dayjs, { Dayjs } from 'dayjs';
-import {
-  AdverseParty,
-  ClaimStatus,
-  Facility,
-  IClaim
-} from '../../models/claim';
+import { ClaimStatus, IClaim } from '../../models/claim';
 import { IsLoadingContext } from '../../providers/IsLoadingProvider';
 import ErrorDisplay from '../../components/ErrorDisplay/ErrorDisplay';
 import {
@@ -38,9 +30,6 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 // import ReactRouterPrompt from 'react-router-prompt';
 import {
   Controller,
-  FieldValues,
-  Form,
-  FormSubmitHandler,
   SubmitHandler,
   useFieldArray,
   useForm
@@ -63,11 +52,9 @@ const ClaimDetails: React.FC = () => {
   const [saving, setSaving] = useState(false);
 
   const {
-    register,
     handleSubmit,
     formState: { errors },
-    control,
-    setValue
+    control
   } = useForm<ClaimFormData>({
     defaultValues: async () => {
       setIsLoading(true);
