@@ -1,6 +1,7 @@
 import { Schema, model, Document } from 'mongoose';
 
 export interface IClaim extends Document {
+  claimNumber: string;
   dateOfLoss: Date;
   createdDate: Date;
   lastUpdatedDate: Date;
@@ -38,6 +39,8 @@ export enum ClaimStatus {
 }
 
 export const claimSchema = new Schema<IClaim>({
+  _id: { type: String, required: true },
+  claimNumber: { type: String, unique: true, required: true },
   dateOfLoss: { type: Date, required: false },
   createdDate: { type: Date, required: true },
   lastUpdatedDate: { type: Date, required: true },

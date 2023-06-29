@@ -1,3 +1,4 @@
+import { Dayjs } from 'dayjs';
 export type AdverseParty = {
   name?: string;
   phoneNumber?: string;
@@ -26,9 +27,9 @@ export type Facility = {
 
 export interface IClaim {
   _id: string;
-  dateOfLoss?: Date;
-  createdDate: Date;
-  lastUpdatedDate: Date;
+  dateOfLoss?: Dayjs | null;
+  createdDate: Dayjs;
+  lastUpdatedDate: Dayjs;
   facilities?: Facility[];
   adverseParty?: AdverseParty;
   status: ClaimStatus;

@@ -28,7 +28,7 @@ app.get('*', (req, res) => {
 // Server setup
 app.listen(port, async () => {
   await connect(mongoUrl, {
-    dbName: 'claims-management'
+    dbName: 'monocle'
   });
   console.log('Successfully connected to MongoDB.');
   console.log('listening on port', port);

@@ -11,7 +11,9 @@ import {
 const router = Router();
 
 router.route('/').post(startClaim).get(getClaims);
-router.get('/:claimId', getClaimByIdValidations, getClaim);
-router.put('/:claimId', updateClaimValidations, updateClaimById);
+router
+  .route('/:claimId')
+  .get(getClaimByIdValidations, getClaim)
+  .put(updateClaimValidations, updateClaimById);
 
 export default router;

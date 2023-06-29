@@ -1,9 +1,40 @@
 import { Claim, ClaimStatus, IClaim } from '../models/Claim';
 import { Error as MongooseError, Types, Document, ObjectId } from 'mongoose';
+import { ClaimNumberModel } from '../models/ClaimNumber';
+import retry from 'async-retry';
+
+async function generateClaimNumberWithRetry(): Promise<string> {
+  async function generateSequentialClaimNumber(): Promise<string> {
+    const document = await ClaimNumberModel.findOne()
+      .sort({ claimNumber: -1 })
+      .exec();
+
+    const lastClaimNumber = document
+      ? parseInt(document.claimNumber)
+      : 10000000;
+
+    // Generate a new 8-digit claim number
+    const newClaimNumber = (lastClaimNumber + 1).toString().padStart(8, '0');
+
+    // Check if the claim number already exists in the database
+    await ClaimNumberModel.create({ claimNumber: newClaimNumber });
+
+    return newClaimNumber;
+  }
+
+  return await retry(generateSequentialClaimNumber, {
+    retries: 5,
+    minTimeout: 500
+  });
+}
 
 export default {
   startClaim: async (): Promise<IClaim | MongooseError.ValidationError> => {
+    const claimNumber = await generateClaimNumberWithRetry();
+
     const claim = new Claim({
+      _id: claimNumber,
+      claimNumber: claimNumber,
       createdDate: Date.now(),
       lastUpdatedDate: Date.now(),
       status: ClaimStatus.UnderInvestigation
