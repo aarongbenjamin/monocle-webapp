@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monocle.Api", "Monocle.Api\Monocle.Api.csproj", "{8377CF64-8713-4E4F-B285-B5DF0BCE1186}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monocle.Domain", "Monocle.Domain\Monocle.Domain.csproj", "{7192CE8D-30F7-4881-87E5-535CB9261276}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monocle.Infrastructure", "Monocle.Infrastructure\Monocle.Infrastructure.csproj", "{B840EDF3-FB29-4031-A8EB-CC4FF2CD44FA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8377CF64-8713-4E4F-B285-B5DF0BCE1186}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8377CF64-8713-4E4F-B285-B5DF0BCE1186}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8377CF64-8713-4E4F-B285-B5DF0BCE1186}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8377CF64-8713-4E4F-B285-B5DF0BCE1186}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7192CE8D-30F7-4881-87E5-535CB9261276}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7192CE8D-30F7-4881-87E5-535CB9261276}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7192CE8D-30F7-4881-87E5-535CB9261276}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7192CE8D-30F7-4881-87E5-535CB9261276}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B840EDF3-FB29-4031-A8EB-CC4FF2CD44FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B840EDF3-FB29-4031-A8EB-CC4FF2CD44FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B840EDF3-FB29-4031-A8EB-CC4FF2CD44FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B840EDF3-FB29-4031-A8EB-CC4FF2CD44FA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,3 @@
+namespace Monocle.Domain.Aggregates;
+
+
