@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  webapp:
+    build:
+      target: production
+    container_name: claims-management
+    volumes: []
+    environment:
+      - ENVIRONMENT=production
+    command: node /usr/src/app/build/server.js
+  
