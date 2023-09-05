@@ -1,5 +1,4 @@
 {
-    // "dotnet.defaultSolution": "src/WebApi/Monocle.Api/Monocle.Api.sln",
     "editor.formatOnPaste": false, // required
     "editor.formatOnType": false, // required
     "editor.formatOnSave": true, // optional
@@ -12,5 +11,6 @@
     "[typescript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "typescript.tsdk": "node_modules/typescript/lib"
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "dotnet.defaultSolution": "src/WebApi/Monocle.WebApi.sln"
 }
