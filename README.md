@@ -1,25 +1,10 @@
-# claims-management
+# monocle-webapp
+
 [Nonprod](https://monocle-webapp.azurewebsites.net)
-## Installing MongoDb locally in docker
 
-```
-docker pull mongo
-```
+## Starting the Application Locally
 
-```
-docker run \
--d \
---name mongo-local \
--p 27017:27017 \
-mongo
-```
+Run these commands in 2 separate terminals.
 
-## Building docker image
-
-```
-docker build . -f server/Dockerfile --target base -t claims-management:latest
-```
-
-```
-docker run -it claims-management:latest /bin/bash
-```
+- `cd src/WebApi/Monocle.Api` then `dotnet run`
+- `cd src/UI` then `npm start`
