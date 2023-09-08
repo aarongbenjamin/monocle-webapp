@@ -37,7 +37,7 @@ import {
   useForm
 } from 'react-hook-form';
 import StyledModal from '../../components/General/Modal/StyledModal';
-type ClaimFormData = Omit<IClaim, '_id' | 'createdDate' | 'lastUpdatedDate'> & {
+type ClaimFormData = Omit<IClaim, 'id' | 'createdDate' | 'lastUpdatedDate'> & {
   dateOfLoss: Dayjs | null;
 };
 

@@ -2,10 +2,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace Monocle.Api.Models;
-
-public class Claim
+public abstract class Entity<T>
 {
-    public int? Id { get; set; }
+    public T Id { get; set; } = default;
+}
+public class Claim : Entity<int>
+{
     [NotMapped]
     public string? ClaimNumber { get => Id.ToString(); }
     public DateTime? DateOfLoss { get; set; }
@@ -16,9 +18,8 @@ public class Claim
     public ClaimStatus? Status { get; set; }
 }
 
-public class Facility
+public class Facility : Entity<int>
 {
-    public int Id { get; set; }
     public string? Type { get; set; }
     public string? RepairCost { get; set; }
     public string? Description { get; set; }

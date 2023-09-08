@@ -351,3 +351,4 @@ MigrationBackup/
 
 **/build
 *.db
+src/WebApi/Monocle.Api/appsettings.local.json

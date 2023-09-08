@@ -3,18 +3,18 @@ import { IClaim } from '../../models/claim';
 import { ValidationErrorResponse } from '../../models/validationError';
 
 export const createClaim = async () => {
-  const response = await axios.post<IClaim>('/api/claims');
+  const response = await axios.post<IClaim>('/claims');
 
   return response.data;
 };
 export const fetchClaims = async () => {
-  const response = await axios.get<IClaim[]>('/api/claims');
+  const response = await axios.get<IClaim[]>('/claims');
 
   return response.data;
 };
 
 export const fetchClaimById = async (claimId: string) => {
-  const response = await axios.get<IClaim>(`/api/claims/${claimId}`);
+  const response = await axios.get<IClaim>(`/claims/${claimId}`);
 
   return response.data;
 };

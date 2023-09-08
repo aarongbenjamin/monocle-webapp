@@ -7,7 +7,7 @@ using Monocle.Api.Infrastructure;
 
 #nullable disable
 
-namespace Monocle.Api.Infrastructure.Migrations
+namespace Monocle.Api.Migrations
 {
     [DbContext(typeof(MonocleDbContext))]
     partial class MonocleDbContextModelSnapshot : ModelSnapshot
@@ -19,7 +19,7 @@ namespace Monocle.Api.Infrastructure.Migrations
 
             modelBuilder.Entity("Monocle.Api.Models.Claim", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -126,11 +126,11 @@ namespace Monocle.Api.Infrastructure.Migrations
 
                     b.OwnsMany("Monocle.Api.Models.Facility", "Facilities", b1 =>
                         {
-                            b1.Property<int>("ClaimId")
-                                .HasColumnType("INTEGER");
-
                             b1.Property<int>("Id")
                                 .ValueGeneratedOnAdd()
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<int>("ClaimId")
                                 .HasColumnType("INTEGER");
 
                             b1.Property<string>("Description")
@@ -142,7 +142,9 @@ namespace Monocle.Api.Infrastructure.Migrations
                             b1.Property<string>("Type")
                                 .HasColumnType("TEXT");
 
-                            b1.HasKey("ClaimId", "Id");
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("ClaimId");
 
                             b1.ToTable("Facility");
 

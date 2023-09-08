@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Monocle.Api.Infrastructure.Migrations
+namespace Monocle.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -43,15 +43,16 @@ namespace Monocle.Api.Infrastructure.Migrations
                 name: "Facility",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false),
-                    ClaimId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     Type = table.Column<string>(type: "TEXT", nullable: true),
                     RepairCost = table.Column<string>(type: "TEXT", nullable: true),
-                    Description = table.Column<string>(type: "TEXT", nullable: true)
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    ClaimId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Facility", x => new { x.ClaimId, x.Id });
+                    table.PrimaryKey("PK_Facility", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Facility_Claims_ClaimId",
                         column: x => x.ClaimId,
@@ -59,6 +60,11 @@ namespace Monocle.Api.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Facility_ClaimId",
+                table: "Facility",
+                column: "ClaimId");
         }
 
         /// <inheritdoc />

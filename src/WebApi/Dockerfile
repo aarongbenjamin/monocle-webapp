@@ -1,9 +1,16 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:7.0
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS publish 
 
-WORKDIR /app
+WORKDIR /build
+ARG configuration=Release
+EXPOSE 5219
+ENV ASPNETCORE_URLS=http://+:5219
 
 COPY . .
 
-RUN dotnet publish -c release
+RUN dotnet publish -c $configuration -o /publish
 
-CMD dotnet run
+FROM publish AS final
+WORKDIR /app
+COPY --from=publish /publish .
+
+ENTRYPOINT ["dotnet", "Monocle.Api.dll"]

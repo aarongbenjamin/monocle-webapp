@@ -1,37 +1,11 @@
-version: '3.7'
-
 services:
-  spa:
-    container_name: monocle-spa
-    ports:
-      - 3000:3000
-    build:
-      context: src/UI
-      dockerfile: |-
-        FROM node:16-alpine
-        WORKDIR /app
-        COPY . .
-        # CMD npm install && npm run build
-    command: npm start
   webapi:
     build:
-      dockerfile: src/WebApi/Dockerfile
+      context: ./src/WebApi
+      target: final
     container_name: monocle-webapi
-    expose:
-      - '5000'
     ports:
-      - '5000:5000'
+      - '5219:5219'
     environment:
-      - MONGO_URI=mongodb://mongo-local:27017
-  postgres:
-    image: postgres:14-alpine
-    container_name: postgres
-    secrets:
-      - POSTGRES_PASSWORD
-    environment:
-      POSTGRES_USER: admin
-      POSTGRES_DB: monocle
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - 5432:5432
+      - ASPNETCORE_ENVIRONMENT=Development
+      - CONNECTION_STRINGS__Monocle=Host=postgres:5432

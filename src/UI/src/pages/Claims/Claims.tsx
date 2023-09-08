@@ -50,7 +50,7 @@ const Claims = () => {
     },
     {
       onSuccess: (data) => {
-        if (!data) {
+        if (!data || data.length === 0) {
           setClaims([]);
         } else {
           setClaims(data);
@@ -62,7 +62,7 @@ const Claims = () => {
   const handleAddClaimClick = async () => {
     const newClaim = await createClaim();
 
-    navigate(`/claims/${newClaim._id}`);
+    navigate(`/claims/${newClaim.id}`);
   };
 
   return (
@@ -86,14 +86,14 @@ const Claims = () => {
             <TableBody>
               {claims.map((claim) => (
                 <StyledTableRow
-                  key={claim._id}
+                  key={claim.id}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   onClick={(event) => {
-                    navigate(`/claims/${claim._id}`);
-                    setTitle(`Claim - ${claim._id}`);
+                    navigate(`/claims/${claim.id}`);
+                    setTitle(`Claim - ${claim.id}`);
                   }}
                 >
-                  <TableCell className="claimNumber">{claim._id}</TableCell>
+                  <TableCell className="claimNumber">{claim.id}</TableCell>
                   <TableCell>{formatStatus(claim.status)}</TableCell>
                   <TableCell>
                     {standardDateTimeFormat(claim.lastUpdatedDate)}

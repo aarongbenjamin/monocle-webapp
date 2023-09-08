@@ -26,7 +26,7 @@ export type Facility = {
 };
 
 export interface IClaim {
-  _id: string;
+  id: string;
   dateOfLoss?: Dayjs | null;
   createdDate: Dayjs;
   lastUpdatedDate: Dayjs;
