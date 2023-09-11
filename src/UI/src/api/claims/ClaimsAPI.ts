@@ -23,10 +23,7 @@ export const updateClaim = async (
   updatedData: Partial<IClaim>
 ): Promise<IClaim | ValidationErrorResponse> => {
   try {
-    const response = await axios.put<IClaim>(
-      `/api/claims/${claimId}`,
-      updatedData
-    );
+    const response = await axios.put<IClaim>(`/claims/${claimId}`, updatedData);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

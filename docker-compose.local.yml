@@ -9,7 +9,7 @@ services:
         FROM node:16-alpine
         WORKDIR /app
         COPY . .
-        CMD npm install && npm run build
+        CMD npm install
     command: npm start
   postgres:
     image: postgres

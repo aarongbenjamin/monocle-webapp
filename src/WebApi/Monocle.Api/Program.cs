@@ -64,7 +64,9 @@ app.MapHealthChecks("/health");
 
 app.MapGet("/claims", async (MonocleDbContext context) =>
 {
-    var claims = await context.Claims.ToListAsync();
+    var claims = await context.Claims
+        .AsNoTracking()
+        .ToListAsync();
     return claims.Any() ? Results.Ok(claims) : Results.NoContent();
 });
 app.MapGet("/claims/{id}", async (MonocleDbContext context, int id) =>
@@ -90,16 +92,11 @@ app.MapPut("/claims/{id}", async (MonocleDbContext context, Claim claim, int id)
 
     if (existing is null) return Results.NotFound();
 
-    var entry = context.Entry(existing);
-
-    entry.CurrentValues.SetValues(new
-    {
-        claim.AdverseParty,
-        claim.Facilities,
-        claim.DateOfLoss,
-        claim.Status,
-        LastUpdatedDate = DateTime.UtcNow
-    });
+    existing.AdverseParty = claim.AdverseParty;
+    existing.Facilities = claim.Facilities;
+    existing.DateOfLoss = claim.DateOfLoss;
+    existing.Status = claim.Status;
+    existing.LastUpdatedDate = DateTime.UtcNow;
 
     await context.SaveChangesAsync();
 
@@ -107,3 +104,4 @@ app.MapPut("/claims/{id}", async (MonocleDbContext context, Claim claim, int id)
 });
 
 app.Run();
+
