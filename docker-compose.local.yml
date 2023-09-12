@@ -1,17 +1,19 @@
 services:
   spa:
     container_name: monocle-spa
+    image: node:16
     ports:
       - 3000:3000
-    build:
-      context: src/UI
-      dockerfile_inline: |
-        FROM node:16-alpine
-        WORKDIR /app
-        COPY . .
-        CMD npm install
-    command: npm start
+    volumes:
+      - ./src/UI:/app
+    command:
+      - /bin/bash
+      - -c
+      - |
+        cd /app
+        npm start
   postgres:
+    container_name: monocle-postgres
     image: postgres
     restart: always
     ports:
@@ -22,6 +24,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
   pgadmin:
+    container_name: monocle-postgres-admin
     image: dpage/pgadmin4
     restart: always
     ports:
