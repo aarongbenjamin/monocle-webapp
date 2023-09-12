@@ -16,65 +16,33 @@
 # For more information on GitHub Actions for Azure: https://github.com/Azure/Actions
 # For more information on the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # For more samples to get started with GitHub Action workflows to deploy to Azure: https://github.com/Azure/actions-workflow-samples
-
+name: Spa Build and Test
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: monocle-webapp    # set this to your application's name
-  AZURE_WEBAPP_PACKAGE_PATH: './app'      # set this to the path to your web app project, defaults to the repository root
-  NODE_VERSION: '18.x'   
-  NODE_ENV: 'development'             # set this to the node version to use
+  NODE_VERSION: "18.x"
+  NODE_ENV: "development" # set this to the node version to use
 
 permissions:
   contents: read
 
 jobs:
-  build-deploy:
-    environment:
-      name: 'Development'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+  build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-        cache: 'npm'
-    - name: client npm install, build, and test
-      run: |
-        cd client
-        npm install
-        npm run build --if-present
-        
-    - name: server npm install, build, and test
-      run: |
-        cd server
-        npm install
-        npm run build --if-present
-    - name: copy files to app folder
-      run: |
-        mkdir app
-        cp -r server/build ./app
-        cp -r client/build ./app/build/public
-        cp -r server/node_modules ./app/node_modules
-        cp package.json ./app
-        cp package-lock.json ./app
-    - name: 'Deploy to Azure WebApp'
-      id: deploy-to-webapp
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-
-        
-    
-
-  
-
-    
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - name: client npm install, build, and test
+        run: |
+          cd client
+          npm install
+          npm run build --if-present
+          npm run test
