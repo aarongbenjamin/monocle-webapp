@@ -5,6 +5,7 @@ name: .NET Build and Test
 
 on:
   push:
+    branches-ignore: ["main"]
     paths:
       - "./src/WebApi"
 
