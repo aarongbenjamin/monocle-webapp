@@ -19,7 +19,7 @@
 name: Spa Build and Test
 on:
   push:
-    branches: ["main"]
+    branches-ignore: ["main"]
   workflow_dispatch:
 
 env:
