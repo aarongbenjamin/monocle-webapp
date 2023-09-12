@@ -1,11 +1,9 @@
 .PHONY: up up-prod up-local down build build-local build-prod start-api start-ui start
 CONN='Host=localhost;Port=5432;Username=postgres;Password=mypgdbpass;Database=monocle'
 EF-PROJECT=src/WebApi/Monocle.Api
-up:
-	docker compose up -d
 up-prod:
 	docker compose -f docker-compose.base.yml -f docker-compose.prod.yml up
-up-local:
+up:
 	docker compose -f docker-compose.base.yml -f docker-compose.local.yml up -d
 stop:
 	docker compose -f docker-compose.base.yml -f docker-compose.local.yml stop 

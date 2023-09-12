@@ -14,7 +14,7 @@ To drop the database
 
 ## Running the Application Locally (with docker compose)
 
-`make up-local`
+`make up`
 
 to stop the application  
 `make stop`
