@@ -10,8 +10,6 @@ stop:
 down:
 	docker compose -f docker-compose.base.yml -f docker-compose.local.yml down
 build:
-	docker compose build
-build-local:
 	docker compose -f docker-compose.base.yml -f docker-compose.local.yml build
 build-prod:
 	docker compose -f docker-compose.base.yml -f docker-compose.prod.yml build

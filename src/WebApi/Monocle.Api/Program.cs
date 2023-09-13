@@ -40,11 +40,11 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddInfrastructure(builder.Configuration);
 
-builder.Services.AddHealthChecks();
+builder.Services.AddHealthChecks().AddDbContextCheck<MonocleDbContext>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -60,7 +60,7 @@ app.UseAuthorization();
 
 app.UseCors("AllowSpecificOrigin");
 
-app.MapHealthChecks("/health");
+app.UseHealthChecks("/health");
 
 app.MapGet("/claims", async (MonocleDbContext context) =>
 {
