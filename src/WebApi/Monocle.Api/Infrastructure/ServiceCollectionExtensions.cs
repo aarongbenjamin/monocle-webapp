@@ -19,7 +19,8 @@ public static class ServiceCollectionExtensions
                     break;
                 case "Postgres":
                 default:
-                    var connStringBuilder = new Npgsql.NpgsqlConnectionStringBuilder(configuration.GetConnectionString("Monocle"));
+                    string? connectionString = configuration.GetConnectionString("Monocle");
+                    var connStringBuilder = new Npgsql.NpgsqlConnectionStringBuilder(connectionString);
                     options.UseNpgsql(connStringBuilder.ConnectionString);
                     break;
             }
