@@ -7,6 +7,7 @@ using Monocle.Api.Models;
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.local.json", true);
 // Add services to the container.
+builder.Services.AddLogging();
 
 builder.Services.AddControllers();
 builder.Services.ConfigureHttpJsonOptions(options =>

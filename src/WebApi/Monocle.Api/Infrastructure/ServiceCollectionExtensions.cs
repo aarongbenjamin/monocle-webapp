@@ -7,8 +7,9 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         var dbProvider = configuration.GetValue<string>("DatabaseProvider");
-        services.AddDbContext<MonocleDbContext>(options =>
+        services.AddDbContext<MonocleDbContext>((sp, options) =>
         {
+            var logger = sp.GetRequiredService<ILoggerFactory>().CreateLogger("InfrastructureServices");
             switch (dbProvider)
             {
                 case "InMemory":
@@ -20,6 +21,7 @@ public static class ServiceCollectionExtensions
                 case "Postgres":
                 default:
                     string? connectionString = configuration.GetConnectionString("Monocle");
+                    logger.LogInformation($"Using connection string {connectionString}");
                     var connStringBuilder = new Npgsql.NpgsqlConnectionStringBuilder(connectionString);
                     options.UseNpgsql(connStringBuilder.ConnectionString);
                     break;
