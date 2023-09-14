@@ -1,6 +1,9 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.OpenApi.Models;
+using Monocle.Api.HealthChecks;
 using Monocle.Api.Infrastructure;
 using Monocle.Api.Models;
 
@@ -41,7 +44,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddInfrastructure(builder.Configuration);
 
-builder.Services.AddHealthChecks().AddDbContextCheck<MonocleDbContext>();
+builder.Services.AddHealthChecks().AddCustomDBContextCheck<MonocleDbContext>();
 
 var app = builder.Build();
 

@@ -6,12 +6,6 @@ services:
     container_name: monocle-webapi
     ports:
       - '5219:5219'
-    env_file:
-      - monocle-webapi.env
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-    
-
-secrets:
-  monocle_connection_string:
-    file: ./
+      - ConnectionStrings__Monocle=Host=postgres;Port=5432;Username=postgres;Password=mypgdbpass;Database=monocle

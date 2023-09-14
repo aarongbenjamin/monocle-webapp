@@ -22,8 +22,7 @@ public static class ServiceCollectionExtensions
                 default:
                     string? connectionString = configuration.GetConnectionString("Monocle");
                     logger.LogInformation($"Using connection string {connectionString}");
-                    var connStringBuilder = new Npgsql.NpgsqlConnectionStringBuilder(connectionString);
-                    options.UseNpgsql(connStringBuilder.ConnectionString);
+                    options.UseNpgsql(connectionString);
                     break;
             }
         });

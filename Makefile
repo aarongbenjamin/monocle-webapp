@@ -19,3 +19,5 @@ ef-migrations-add:
 	dotnet ef migrations add $(name) -p $(EF-PROJECT) -- --conn $(CONN)
 ef-migrations-remove:
 	dotnet ef migrations remove -p $(EF-PROJECT) -- --conn $(CONN)
+ef-migrations-script:
+	dotnet ef migrations script $(name) -p $(EF-PROJECT) -o $(EF-PROJECT)/Migrations/Sql/$(name).sql --idempotent -- --conn $(CONN)

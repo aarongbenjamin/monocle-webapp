@@ -25,3 +25,10 @@ Run these commands in 2 separate terminals.
 
 - `cd src/WebApi/Monocle.Api` then `dotnet run`
 - `cd src/UI` then `npm start`
+
+## Common Commands
+
+- `az postgres flexible-server execute -n <server-name> -u <username> -p "<password>" -d <database-name> --file-path "<file-path>"`
+- `az postgres flexible-server connect -n <servername> -u <username> -p "<password>" -d <databasename>`
+
+server: monocle-pgsql-np.postgres.database.azure.com
