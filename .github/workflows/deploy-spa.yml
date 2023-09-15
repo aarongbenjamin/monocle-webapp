@@ -17,6 +17,7 @@ on:
     branches: ["main"]
     paths:
       - "src/UI/**"
+  workflow_dispatch:
   # pull_request:
   #   types: [opened, synchronize, reopened, closed]
   #   branches: [ "main" ]
