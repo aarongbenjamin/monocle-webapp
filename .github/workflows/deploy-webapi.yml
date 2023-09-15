@@ -27,6 +27,8 @@ env:
 on:
   push:
     branches: ["main"]
+    paths:
+      - "src/WebApi/**"
   workflow_dispatch:
 
 permissions:
