@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import {
   Button,
   Grid,
@@ -22,8 +22,7 @@ import { NavBarTitleContext } from '../../providers/NavbarTitleProvider';
 import { createClaim, fetchClaims } from '../../api/claims/ClaimsAPI';
 import { IsLoadingContext } from '../../providers/IsLoadingProvider';
 import { formatStatus } from '../../util/formatStatus';
-import RecentClaimsTable from '../../components/RecentClaimsTable/RecentClaimsTable';
-import { IClaim } from '../../models/claim'
+import { IClaim } from '../../models/claim';
 
 const StyledTableRow = styled(TableRow)`
   &:hover {
@@ -37,30 +36,42 @@ const StyledTableRow = styled(TableRow)`
 `;
 
 const Claims = () => {
-
   const { claims, setClaims } = useContext(ClaimsContext);
   const { setNavbarTitle: setTitle } = useContext(NavBarTitleContext);
-  
+
   const loadRecentClaims = () => {
-    const recentSearchesJSON: string | null = localStorage.getItem('recentSearches');
+    const recentSearchesJSON: string | null =
+      localStorage.getItem('recentSearches');
     if (recentSearchesJSON == null) return [];
     return JSON.parse(recentSearchesJSON);
-  }
+  };
 
   const recentClaims: IClaim[] = loadRecentClaims();
 
   const addRecentClaim = (claimId: string, recentClaim: IClaim) => {
-    const recentClaimIds: string[] = recentClaims.map((claim: IClaim) => claim.id);
+    const recentClaimIds: string[] = recentClaims.map(
+      (claim: IClaim) => claim.id
+    );
     const isNotDuplicate: boolean = !recentClaimIds.includes(claimId);
-   
+
     if (isNotDuplicate) {
-      if (recentClaims.length > 4) { recentClaims.pop(); }
-      localStorage.setItem('recentSearches', JSON.stringify([recentClaim, ...recentClaims]))
+      if (recentClaims.length > 4) {
+        recentClaims.pop();
+      }
+      localStorage.setItem(
+        'recentSearches',
+        JSON.stringify([recentClaim, ...recentClaims])
+      );
     } else {
-      const filteredRecentClaims: IClaim[] = recentClaims.filter((claim: IClaim) => claim.id !== claimId)
-      localStorage.setItem('recentSearches', JSON.stringify([recentClaim, ...filteredRecentClaims]))
+      const filteredRecentClaims: IClaim[] = recentClaims.filter(
+        (claim: IClaim) => claim.id !== claimId
+      );
+      localStorage.setItem(
+        'recentSearches',
+        JSON.stringify([recentClaim, ...filteredRecentClaims])
+      );
     }
-  }
+  };
 
   const { setIsLoading } = useContext(IsLoadingContext);
   const navigate = useNavigate();
@@ -132,7 +143,7 @@ const Claims = () => {
         <TableContainer>
           <Table sx={{ marginTop: '1rem' }}>
             <TableHead>
-            <TableRow>
+              <TableRow>
                 <TableCell>Recent Claims</TableCell>
                 <TableCell>Status</TableCell>
                 <TableCell>Last Activity Date</TableCell>
