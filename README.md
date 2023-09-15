@@ -1,6 +1,6 @@
 # monocle-webapp
 
-[Nonprod](https://monocle-webapp.azurewebsites.net)
+[Nonprod](https://purple-mushroom-035a32310.3.azurestaticapps.net)
 
 ## Migrating the database
 
