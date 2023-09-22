@@ -10,6 +10,7 @@ import {
   Typography
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import SearchBar from '../SearchBar/SearchBar';
 import { NavBarTitleContext } from '../../providers/NavbarTitleProvider';
 import { useNavigate } from 'react-router-dom';
 import { IsLoadingContext } from '../../providers/IsLoadingProvider';
@@ -60,6 +61,7 @@ const Navbar = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {title}
           </Typography>
+          <SearchBar />
         </Toolbar>
       </AppBar>
       {isLoading && <LinearProgress />}

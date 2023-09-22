@@ -18,6 +18,13 @@ export const fetchClaimById = async (claimId: string) => {
 
   return response.data;
 };
+
+export const exists = async (claimNumber: string) => {
+  const claim = await fetchClaimById(claimNumber);
+  
+  return !!claim;
+}
+
 export const updateClaim = async (
   claimId: string,
   updatedData: Partial<IClaim>
