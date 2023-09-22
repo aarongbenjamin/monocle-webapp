@@ -14,7 +14,7 @@ const SearchBar: FunctionComponent = () => {
     e.preventDefault();
     const result = await exists(searchValue);
     
-    // result ? navigate(`/claims/${searchValue}`) : alert('what the heck bro');
+    result ? navigate(`/claims/${searchValue}`) : alert('what the heck bro');
   }
 
   return (
