@@ -1,3 +1,4 @@
+using System.Net.Http;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
@@ -73,6 +74,13 @@ app.MapGet("/claims", async (MonocleDbContext context) =>
         .ToListAsync();
     return claims.Any() ? Results.Ok(claims) : Results.NoContent();
 });
+
+app.MapMethods("/claims/{id}", new[] { HttpMethod.Head.ToString().ToUpper() },
+               async (MonocleDbContext context, int id) =>
+               await context.ExistsAsync<Claim>(c => c.Id == id) ?
+                     Results.NoContent() :
+                     Results.NotFound());
+
 app.MapGet("/claims/{id}", async (MonocleDbContext context, int id) =>
     await context.FindAsync<Claim>(id) is Claim claim
      ? Results.Ok(claim) : Results.NotFound()

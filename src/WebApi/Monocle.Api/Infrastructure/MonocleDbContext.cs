@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Monocle.Api.Models;
 
 namespace Monocle.Api.Infrastructure;
@@ -15,4 +17,6 @@ public class MonocleDbContext : DbContext
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(MonocleDbContext).Assembly);
     }
+    public Task<bool> ExistsAsync<T>(System.Linq.Expressions.Expression<Func<T, bool>> predicate)
+    where T : class => Set<T>().AnyAsync(predicate);
 }
