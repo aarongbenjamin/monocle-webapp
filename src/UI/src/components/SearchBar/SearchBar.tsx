@@ -1,23 +1,24 @@
 import SearchIcon from '@mui/icons-material/Search';
-import { Box, Input, InputAdornment, InputLabel, Button } from '@mui/material';
+import { Box, Input, Button } from '@mui/material';
 import React, { FunctionComponent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { exists } from '../../api/claims/ClaimsAPI';
 
 const SearchBar: FunctionComponent = () => {
-  const [searchValue, setSearchValue] = useState('');
+  const [claimNumber, setClaimNumber] = useState('');
 
   const navigate = useNavigate();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    try {
-      const { status } = await exists(searchValue);
-      status === 204 && navigate(`/claims/${searchValue}`);
-    } catch (err) {
+    if (await exists(claimNumber)) {
+      navigate(`/claims/${claimNumber}`);
+    } else {
       alert('Claim not found');
     }
+
+    
   }
 
   return (
@@ -35,8 +36,8 @@ const SearchBar: FunctionComponent = () => {
       <Input
         id="standard"
         placeholder="Claim Number"
-        value={searchValue}
-        onChange={(e) => setSearchValue(e.target.value)}
+        value={claimNumber}
+        onChange={(e) => setClaimNumber(e.target.value)}
         sx={{ color: 'white' }}
         disableUnderline
       />

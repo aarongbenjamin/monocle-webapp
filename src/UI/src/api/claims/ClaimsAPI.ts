@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, HttpStatusCode } from 'axios';
 import { IClaim } from '../../models/claim';
 import { ValidationErrorResponse } from '../../models/validationError';
 
@@ -20,10 +20,17 @@ export const fetchClaimById = async (claimId: string) => {
 };
 
 export const exists = async (claimNumber: string) => {
-  const claim = await axios.head(`/claims/${claimNumber}`);
-  
-  return claim;
-}
+  try {
+    await axios.head(`/claims/${claimNumber}`);
+
+    return true;
+  } catch (err) {
+    if (axios.isAxiosError(err) && err.response?.status === HttpStatusCode.NotFound) {
+      return false;
+    }
+    throw err;
+  }
+};
 
 export const updateClaim = async (
   claimId: string,
@@ -35,7 +42,7 @@ export const updateClaim = async (
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError<ValidationErrorResponse>;
-      if (axiosError.response?.status === 400) {
+      if (axiosError.response?.status === HttpStatusCode.BadRequest) {
         return axiosError.response.data;
       }
     }
