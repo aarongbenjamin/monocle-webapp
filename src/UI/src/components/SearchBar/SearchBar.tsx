@@ -4,17 +4,20 @@ import React, { FunctionComponent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { exists } from '../../api/claims/ClaimsAPI';
 
-
 const SearchBar: FunctionComponent = () => {
   const [searchValue, setSearchValue] = useState('');
 
   const navigate = useNavigate();
 
- async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const result = await exists(searchValue);
-    
-    result ? navigate(`/claims/${searchValue}`) : alert('what the heck bro');
+
+    try {
+      const { status } = await exists(searchValue);
+      status === 204 && navigate(`/claims/${searchValue}`);
+    } catch (err) {
+      alert('Claim not found');
+    }
   }
 
   return (

@@ -20,9 +20,9 @@ export const fetchClaimById = async (claimId: string) => {
 };
 
 export const exists = async (claimNumber: string) => {
-  const claim = await fetchClaimById(claimNumber);
+  const claim = await axios.head(`/claims/${claimNumber}`);
   
-  return !!claim;
+  return claim;
 }
 
 export const updateClaim = async (
