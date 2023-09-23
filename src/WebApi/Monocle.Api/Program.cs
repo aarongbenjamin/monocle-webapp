@@ -115,5 +115,21 @@ app.MapPut("/claims/{id}", async (MonocleDbContext context, Claim claim, int id)
     return Results.Ok(claim);
 });
 
+await MigrateDbInNonProduction(app.Services, app.Configuration, app.Environment);
+
 app.Run();
 
+static async Task MigrateDbInNonProduction(IServiceProvider services, IConfiguration configuration, IWebHostEnvironment environment)
+{
+    if (!environment.IsProduction())
+    {
+        var context = services.GetRequiredService<MonocleDbContext>();
+        var pendingMigrations = await context.Database.GetPendingMigrationsAsync();
+
+        if (pendingMigrations.Any())
+        {
+            await context.Database.EnsureDeletedAsync();
+            await context.Database.EnsureCreatedAsync();
+        }
+    }
+}
