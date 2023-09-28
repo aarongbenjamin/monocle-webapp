@@ -4,11 +4,12 @@ import React, { FunctionComponent, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { exists } from '../../api/claims/ClaimsAPI';
 import { NotificationContext } from '../../providers/NotificationProvider';
+import { Severities } from '../Notification/Notification';
 
 const SearchBar: FunctionComponent = () => {
   const [claimNumber, setClaimNumber] = useState('');
 
-  const { setNotificationOpen } = useContext(NotificationContext);
+  const { setNotification } = useContext(NotificationContext);
 
 
   const navigate = useNavigate();
@@ -21,7 +22,13 @@ const SearchBar: FunctionComponent = () => {
     if (await exists(claimNumber)) {
       navigate(`/claims/${claimNumber}`);
     } else {
-      setNotificationOpen(true);
+      setNotification({
+        open: true,
+        autoHideDuration: 1000,
+        anchorOrigin: { vertical: 'top', horizontal: 'center' },
+        severity: Severities.error,
+        description: 'Claim not found'
+      });
     }
 
     
@@ -45,6 +52,11 @@ const SearchBar: FunctionComponent = () => {
         placeholder="Claim Number"
         value={claimNumber}
         onChange={(e) => setClaimNumber(e.target.value)}
+        onKeyDown={(e) => {
+          if (/[a-z]/i.test(e.key) && e.key !== 'Backspace') {
+            e.preventDefault();
+          }
+        }}
         sx={{ color: 'white' }}
         disableUnderline
       />

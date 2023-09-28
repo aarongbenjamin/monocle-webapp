@@ -11,7 +11,6 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchBar from '../SearchBar/SearchBar';
-import ErrorAlert from '../Notification/Notification';
 import { NavBarTitleContext } from '../../providers/NavbarTitleProvider';
 import { useNavigate } from 'react-router-dom';
 import { IsLoadingContext } from '../../providers/IsLoadingProvider';
@@ -64,7 +63,6 @@ const Navbar = () => {
           </Typography>
           <SearchBar />
         </Toolbar>
-        <ErrorAlert />
       </AppBar>
       {isLoading && <LinearProgress />}
     </Box>
