@@ -7,7 +7,6 @@ const Layout: FunctionComponent = () => {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Navbar />
-
       <Container
         component="div"
         sx={{
