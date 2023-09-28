@@ -35,6 +35,7 @@ const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
     event?: React.SyntheticEvent | Event,
     reason?: string
   ) => {
+    event?.preventDefault();
     if (reason === 'clickaway') {
       return;
     }
