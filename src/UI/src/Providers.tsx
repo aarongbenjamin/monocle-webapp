@@ -2,17 +2,17 @@ import React from 'react';
 import ClaimsProvider from './providers/ClaimsProvider';
 import IsLoadingProvider from './providers/IsLoadingProvider';
 import NavbarTitleProvider from './providers/NavbarTitleProvider';
-import NotificationProvider from './providers/NotificationProvider';
+import AlertDetailsProvider from './providers/AlertProvider';
 
 const ContextProviders = ({ children }: { children: React.ReactNode }) => {
   return (
-    <NotificationProvider>
+    <AlertDetailsProvider>
       <IsLoadingProvider>
         <ClaimsProvider>
           <NavbarTitleProvider>{children}</NavbarTitleProvider>
         </ClaimsProvider>
       </IsLoadingProvider>
-    </NotificationProvider>
+    </AlertDetailsProvider>
   );
 };
 

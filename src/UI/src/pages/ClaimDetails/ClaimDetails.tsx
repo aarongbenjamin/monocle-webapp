@@ -37,6 +37,7 @@ import {
   useForm
 } from 'react-hook-form';
 import StyledModal from '../../components/General/Modal/StyledModal';
+import { AlertDetailsContext, Severities } from '../../providers/AlertProvider';
 type ClaimFormData = Omit<IClaim, 'id' | 'createdDate' | 'lastUpdatedDate'> & {
   dateOfLoss: Dayjs | null;
 };
@@ -48,6 +49,7 @@ const ClaimDetails: React.FC = () => {
     throw new Error('id is empty for ClaimDetails');
   }
   const navigate = useNavigate();
+  const { setAlertDetails } = useContext(AlertDetailsContext)
   const { isLoading, setIsLoading } = useContext(IsLoadingContext);
   const [saveErrors, setSaveErrors] = useState<
     ValidationErrorResponse | undefined
@@ -96,6 +98,10 @@ const ClaimDetails: React.FC = () => {
       setSaveErrors(undefined);
       const newValues = mapClaimResponseToFormData(result);
       reset(newValues);
+      setAlertDetails({
+        description: 'Saved',
+        severity: Severities.success
+      })
     }
   };
 

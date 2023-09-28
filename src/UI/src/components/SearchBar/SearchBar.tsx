@@ -3,15 +3,12 @@ import { Box, Input, Button } from '@mui/material';
 import React, { FunctionComponent, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { exists } from '../../api/claims/ClaimsAPI';
-import {
-  NotificationContext,
-  Severities
-} from '../../providers/NotificationProvider';
+import { AlertDetailsContext, Severities } from '../../providers/AlertProvider';
 
 const SearchBar: FunctionComponent = () => {
   const [claimNumber, setClaimNumber] = useState('');
 
-  const { setNotification } = useContext(NotificationContext);
+  const { setAlertDetails: setNotification } = useContext(AlertDetailsContext);
 
   const navigate = useNavigate();
 
