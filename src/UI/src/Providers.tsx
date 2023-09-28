@@ -6,13 +6,13 @@ import NotificationProvider from './providers/NotificationProvider';
 
 const ContextProviders = ({ children }: { children: React.ReactNode }) => {
   return (
-    <IsLoadingProvider>
-      <NotificationProvider>
+    <NotificationProvider>
+      <IsLoadingProvider>
         <ClaimsProvider>
           <NavbarTitleProvider>{children}</NavbarTitleProvider>
         </ClaimsProvider>
-      </NotificationProvider>
-    </IsLoadingProvider>
+      </IsLoadingProvider>
+    </NotificationProvider>
   );
 };
 
