@@ -115,5 +115,8 @@ app.MapPut("/claims/{id}", async (MonocleDbContext context, Claim claim, int id)
     return Results.Ok(claim);
 });
 
+InfrastructureSetup.MigrateDbInDevelopment(app.Services, app.Configuration, app.Environment);
+
 app.Run();
+
 
