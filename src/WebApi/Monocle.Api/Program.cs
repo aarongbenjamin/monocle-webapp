@@ -67,11 +67,18 @@ app.UseCors("AllowSpecificOrigin");
 
 app.UseHealthChecks("/health");
 
-app.MapGet("/claims", async (MonocleDbContext context) =>
+app.MapGet("/claims", async (HttpContext httpContext, MonocleDbContext context) =>
 {
-    var claims = await context.Claims
-        .AsNoTracking()
-        .ToListAsync();
+    var claimNumberSearch = httpContext.Request.Query["claimNumber"];
+    var query = context.Claims
+        .AsNoTracking();
+
+    if (claimNumberSearch.Any())
+    {
+        query = query.Where(x => x.Id.ToString().StartsWith(claimNumberSearch[0]!));
+    }
+
+    var claims = await query.ToListAsync();
     return claims.Any() ? Results.Ok(claims) : Results.NoContent();
 });
 
