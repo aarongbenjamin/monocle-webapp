@@ -7,16 +7,23 @@ import setupAxios from './setup/axios-setup';
 import GlobalErrorHandler from './components/GlobalErrorHandler/GlobalErrorHandler';
 import '@mui/material';
 import '@mui/material/styles';
+import { PublicClientApplication } from '@azure/msal-browser';
+import { msalConfig } from './setup/auth-config';
+import { MsalProvider } from '@azure/msal-react';
 
 setupAxios();
+const config = msalConfig;
+const msalInstance = new PublicClientApplication(config);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <GlobalErrorHandler />
-    <App />
+    <MsalProvider instance={msalInstance}>
+      <GlobalErrorHandler />
+      <App />
+    </MsalProvider>
   </React.StrictMode>
 );
 
