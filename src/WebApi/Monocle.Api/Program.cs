@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using Monocle.Api.HealthChecks;
 using Monocle.Api.Infrastructure;
 using Monocle.Api.Models;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.local.json", true);
@@ -67,15 +68,14 @@ app.UseCors("AllowSpecificOrigin");
 
 app.UseHealthChecks("/health");
 
-app.MapGet("/claims", async (HttpContext httpContext, MonocleDbContext context) =>
+app.MapGet("/claims", async (HttpContext httpContext, MonocleDbContext context, [FromQuery] int? claimNumber) =>
 {
-    var claimNumberSearch = httpContext.Request.Query["claimNumber"];
     var query = context.Claims
         .AsNoTracking();
 
-    if (claimNumberSearch.Any())
+    if (claimNumber is not null)
     {
-        query = query.Where(x => x.Id.ToString().StartsWith(claimNumberSearch[0]!));
+        query = query.Where(x => x.Id.ToString().StartsWith(claimNumber.ToString()!));
     }
 
     var claims = await query.ToListAsync();
