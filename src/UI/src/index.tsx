@@ -20,8 +20,8 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
+    <GlobalErrorHandler />
     <MsalProvider instance={msalInstance}>
-      <GlobalErrorHandler />
       <App />
     </MsalProvider>
   </React.StrictMode>

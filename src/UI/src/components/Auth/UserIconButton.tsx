@@ -2,12 +2,9 @@ import React, { useState } from 'react';
 import IconButton from '@mui/material/IconButton';
 import Popover from '@mui/material/Popover';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import SignInButton from './SignInButton';
 import SignOutButton from './SignOutButton';
-import { useIsAuthenticated } from '@azure/msal-react';
 
 const UserIconButton: React.FC = () => {
-  const isAuthenticated = useIsAuthenticated();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -42,7 +39,7 @@ const UserIconButton: React.FC = () => {
           horizontal: 'right'
         }}
       >
-        {isAuthenticated ? <SignOutButton /> : <SignInButton />}
+        <SignOutButton />
       </Popover>
     </>
   );
