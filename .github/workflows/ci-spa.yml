@@ -1,4 +1,4 @@
-name: Spa Build and Test
+name: UI - Pull Request
 on:
   push:
     branches-ignore: ["main"]

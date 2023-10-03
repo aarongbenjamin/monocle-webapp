@@ -1,5 +1,4 @@
 import {
-  Navigate,
   Route,
   RouterProvider,
   createBrowserRouter,
@@ -14,14 +13,30 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import ContextProviders from './Providers';
 import ClaimDetails from './pages/ClaimDetails/ClaimDetails';
 import Themes from './Themes';
+import Home from './pages/Home/Home';
+import Protect from './components/Auth/Protect';
 const client = new QueryClient();
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
-      <Route index element={<Navigate to="/claims" />} />
-      <Route path="/claims/:id" element={<ClaimDetails />} />
-      <Route path="/claims" element={<Claims />} />
+      <Route index element={<Home />} />
+      <Route
+        path="/claims/:id"
+        element={
+          <Protect>
+            <ClaimDetails />
+          </Protect>
+        }
+      />
+      <Route
+        path="/claims"
+        element={
+          <Protect>
+            <Claims />
+          </Protect>
+        }
+      />
       <Route path="*" element={<h1>Page Not Found</h1>} />
     </Route>
   )

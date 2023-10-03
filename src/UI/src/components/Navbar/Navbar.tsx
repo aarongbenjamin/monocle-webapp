@@ -14,8 +14,12 @@ import SearchBar from '../SearchBar/SearchBar';
 import { NavBarTitleContext } from '../../providers/NavbarTitleProvider';
 import { useNavigate } from 'react-router-dom';
 import { IsLoadingContext } from '../../providers/IsLoadingProvider';
+import UserIconButton from '../Auth/UserIconButton';
+import { useIsAuthenticated } from '@azure/msal-react';
+import SignInButton from '../Auth/SignInButton';
 
 const Navbar = () => {
+  const isAuthenticated = useIsAuthenticated();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const menuOpen = Boolean(anchorEl);
@@ -62,6 +66,7 @@ const Navbar = () => {
             {title}
           </Typography>
           <SearchBar />
+          {isAuthenticated ? <UserIconButton /> : <SignInButton />}
         </Toolbar>
       </AppBar>
       {isLoading && <LinearProgress />}
